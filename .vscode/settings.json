@@ -1,0 +1,24 @@
+{
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+
+  "oxc.unusedDisableDirectives": "warn",
+
+  // For Tailwind CSS, we can ignore unknown at-rules like @tailwind and @apply.
+  "css.lint.unknownAtRules": "ignore",
+
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  }
+}

@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+coverage
+.turbo
+.tanstack
+tsconfig.tsbuildinfo
+
+.env
+.DS_Store
+*.log
+*.lock
+*.tgz
