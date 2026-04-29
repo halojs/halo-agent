@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@effect/vitest";
-import { Effect, Exit } from "effect";
+import { Effect } from "effect";
 import { makeAssistantMessageEventStream } from "../src/api/event-stream";
 
 describe("makeAssistantMessageEventStream", () => {
@@ -16,57 +16,153 @@ describe("makeAssistantMessageEventStream", () => {
   it.effect("should handle event stream lifecycle", () =>
     Effect.gen(function* () {
       const eventStream = yield* makeAssistantMessageEventStream();
+      const timestamp = Date.now();
+
+      const basePartial = {
+        role: "assistant" as const,
+        api: "openai-completions" as const,
+        provider: "deepseek" as const,
+        model: "deepseek-chat",
+        usage: {
+          input: 0,
+          output: 0,
+          cacheRead: 0,
+          cacheWrite: 0,
+          totalTokens: 0,
+          cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+        },
+        stopReason: "stop" as const,
+        timestamp,
+      };
 
       // Push start event
       eventStream.push({
         type: "start",
-        partial: {
-          role: "assistant",
-          content: [],
-          api: "openai-completions",
-          provider: "deepseek",
-          model: "deepseek-chat",
-          usage: {
-            input: 0,
-            output: 0,
-            cacheRead: 0,
-            cacheWrite: 0,
-            totalTokens: 0,
-            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
-          },
-          stopReason: "stop",
-          timestamp: Date.now(),
-        },
+        partial: { ...basePartial, content: [] },
       });
 
-      // Push text delta
+      // Push text_start event
+      eventStream.push({
+        type: "text_start",
+        contentIndex: 0,
+        partial: { ...basePartial, content: [] },
+      });
+
+      // Push text_delta events
       eventStream.push({
         type: "text_delta",
         contentIndex: 0,
         delta: "Hello",
+        partial: { ...basePartial, content: [{ type: "text" as const, text: "Hello" }] },
+      });
+
+      eventStream.push({
+        type: "text_delta",
+        contentIndex: 0,
+        delta: " world",
+        partial: { ...basePartial, content: [{ type: "text" as const, text: "Hello world" }] },
+      });
+
+      // Push text_end event
+      eventStream.push({
+        type: "text_end",
+        contentIndex: 0,
+        content: "Hello world",
+        partial: { ...basePartial, content: [{ type: "text" as const, text: "Hello world" }] },
+      });
+
+      // Push thinking_start event
+      eventStream.push({
+        type: "thinking_start",
+        contentIndex: 1,
+        partial: { ...basePartial, content: [{ type: "text" as const, text: "Hello world" }] },
+      });
+
+      // Push thinking_delta event
+      eventStream.push({
+        type: "thinking_delta",
+        contentIndex: 1,
+        delta: "Let me think",
         partial: {
-          role: "assistant",
-          content: [{ type: "text", text: "Hello" }],
-          api: "openai-completions",
-          provider: "deepseek",
-          model: "deepseek-chat",
-          usage: {
-            input: 0,
-            output: 0,
-            cacheRead: 0,
-            cacheWrite: 0,
-            totalTokens: 0,
-            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
-          },
-          stopReason: "stop",
-          timestamp: Date.now(),
+          ...basePartial,
+          content: [
+            { type: "text" as const, text: "Hello world" },
+            { type: "thinking" as const, thinking: "Let me think" },
+          ],
+        },
+      });
+
+      // Push thinking_end event
+      eventStream.push({
+        type: "thinking_end",
+        contentIndex: 1,
+        content: "Let me think about this",
+        partial: {
+          ...basePartial,
+          content: [
+            { type: "text" as const, text: "Hello world" },
+            { type: "thinking" as const, thinking: "Let me think about this" },
+          ],
+        },
+      });
+
+      // Push toolcall_start event
+      eventStream.push({
+        type: "toolcall_start",
+        contentIndex: 2,
+        partial: {
+          ...basePartial,
+          content: [
+            { type: "text" as const, text: "Hello world" },
+            { type: "thinking" as const, thinking: "Let me think about this" },
+          ],
+        },
+      });
+
+      // Push toolcall_delta event
+      eventStream.push({
+        type: "toolcall_delta",
+        contentIndex: 2,
+        delta: '{"arg": "val"',
+        partial: {
+          ...basePartial,
+          content: [
+            { type: "text" as const, text: "Hello world" },
+            { type: "thinking" as const, thinking: "Let me think about this" },
+          ],
+        },
+      });
+
+      // Push toolcall_end event
+      const toolCall = {
+        type: "toolCall" as const,
+        id: "call_123",
+        name: "search",
+        arguments: { query: "hello" },
+      };
+
+      eventStream.push({
+        type: "toolcall_end",
+        contentIndex: 2,
+        toolCall,
+        partial: {
+          ...basePartial,
+          content: [
+            { type: "text" as const, text: "Hello world" },
+            { type: "thinking" as const, thinking: "Let me think about this" },
+            toolCall,
+          ],
         },
       });
 
       // Push done event
       const finalMessage = {
         role: "assistant" as const,
-        content: [{ type: "text" as const, text: "Hello" }],
+        content: [
+          { type: "text" as const, text: "Hello world" },
+          { type: "thinking" as const, thinking: "Let me think about this" },
+          toolCall,
+        ],
         api: "openai-completions" as const,
         provider: "deepseek" as const,
         model: "deepseek-chat",
@@ -79,7 +175,7 @@ describe("makeAssistantMessageEventStream", () => {
           cost: { input: 0.001, output: 0.002, cacheRead: 0, cacheWrite: 0, total: 0.003 },
         },
         stopReason: "stop" as const,
-        timestamp: Date.now(),
+        timestamp,
       };
 
       eventStream.push({
@@ -180,21 +276,6 @@ describe("makeAssistantMessageEventStream", () => {
       expect(collectedEvents[1].type).toBe("text_delta");
       expect(collectedEvents[2].type).toBe("text_end");
       expect(collectedEvents[3].type).toBe("done");
-    }).pipe(Effect.asVoid),
-  );
-
-  it.effect("should handle creation errors", () =>
-    Effect.gen(function* () {
-      // Mock a scenario where constructor might throw
-      const originalConsoleError = console.error;
-      console.error = () => {}; // Suppress error logs for test
-
-      // This test would need to be adapted if the constructor could actually throw
-      // For now, we verify the Effect.try wrapper works as expected
-      const result = yield* Effect.exit(makeAssistantMessageEventStream());
-      expect(Exit.isSuccess(result)).toBe(true);
-
-      console.error = originalConsoleError;
     }).pipe(Effect.asVoid),
   );
 

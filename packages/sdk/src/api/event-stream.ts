@@ -84,6 +84,7 @@ export class AssistantMessageEventStream extends EventStream<
         } else if (event.type === "error") {
           return event.error;
         }
+        // Never reached, but required by the type system
         throw new Error("Unexpected event type for final result");
       },
     );
@@ -94,23 +95,21 @@ export class AssistantMessageEventStream extends EventStream<
  * Create a new AssistantMessageEventStream effect.
  *
  * @example
- * const AssistantMessageEventStream = makeAssistantMessageEventStream();
- *
  * Effect.runPromise(Effect.gen(function*() {
- *   const stream = yield* AssistantMessageEventStream;
+ *   const stream = yield* makeAssistantMessageEventStream();
  *
- *   for await (const event of stream) {
- *     console.log(event);
- *   }
+ *   yield* Effect.promise(async () => {
+ *     for await (const event of stream) {
+ *       console.log(event);
+ *     }
+ *   });
  *
- *   const result = yield* stream.result();
+ *   const result = yield* Effect.promise(() => stream.result());
  *   console.log(result);
  * }));
  */
 export const makeAssistantMessageEventStream = (): Effect.Effect<
   AssistantMessageEventStream,
-  Error,
+  never,
   never
-> => {
-  return Effect.try(() => new AssistantMessageEventStream());
-};
+> => Effect.sync(() => new AssistantMessageEventStream());
