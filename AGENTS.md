@@ -1,14 +1,14 @@
 # AGENTS.md
 
-## 任务完成要求
-
-- 在认为任务完成之前，`bun format`、`bun lint` 和 `bun typecheck` 必须全部通过。
-- 禁止运行 `bun test`。请始终使用 `bun run test`（运行 Vitest）。
-
 ## 项目概览
 
 Halo Agent 是一个轻量级的 Web GUI，用于以对话的方式与 Agent AI 协同工作。
 本仓库目前处于**非常早期的开发阶段**。欢迎提出有助于提升长期可维护性的大规模改动。
+
+## 任务完成要求
+
+- 在认为任务完成之前，`bun format`、`bun lint` 和 `bun typecheck` 必须全部通过。
+- 禁止运行 `bun test`。请始终使用 `bun run test`（运行 Vitest）。
 
 ## 核心优先级
 

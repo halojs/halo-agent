@@ -17,14 +17,9 @@
   "scripts": {
     "lint": "oxlint",
     "format": "oxfmt",
-    "typecheck": "tsc --noEmit",
-    "prepare": "effect-language-service patch"
-  },
-  "dependencies": {
-    "effect": "catalog:prod"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@effect/language-service": "catalog:dev",
     "@types/bun": "catalog:types",
     "@types/node": "catalog:types",
     "oxfmt": "catalog:build",
