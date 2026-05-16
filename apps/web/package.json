@@ -15,16 +15,49 @@
   },
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "oxlint",
     "format": "oxfmt",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@tanstack/react-query": "catalog:web",
+    "@tanstack/react-router": "catalog:web",
+    "motion": "catalog:web",
+    "react": "catalog:web",
+    "react-dom": "catalog:web"
+  },
   "devDependencies": {
-    "@types/bun": "catalog:types",
-    "@types/node": "catalog:types",
+    "@babel/core": "catalog:dev",
+    "@base-ui/react": "^1.4.1",
+    "@fontsource-variable/dm-sans": "catalog:assets",
+    "@fontsource-variable/geist": "catalog:assets",
+    "@rolldown/plugin-babel": "catalog:dev",
+    "@tailwindcss/vite": "catalog:dev",
+    "@tanstack/router-plugin": "catalog:dev",
+    "@types/react": "catalog:types",
+    "@types/react-dom": "catalog:types",
+    "@vitejs/plugin-react": "catalog:dev",
+    "babel-plugin-react-compiler": "catalog:dev",
+    "class-variance-authority": "catalog:web",
+    "clsx": "catalog:web",
+    "lucide-react": "catalog:assets",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
+    "shadcn": "catalog:web",
+    "tailwind-merge": "catalog:web",
+    "tailwind-variants": "catalog:web",
+    "tailwindcss": "catalog:web",
     "tsdown": "catalog:build",
-    "typescript": "catalog:build"
-  }
+    "tw-animate-css": "catalog:web",
+    "typescript": "catalog:build",
+    "vite": "catalog:build"
+  },
+  "engines": {
+    "bun": "^1.3.12",
+    "node": "^24.14.1"
+  },
+  "packageManager": "bun@1.3.14"
 }

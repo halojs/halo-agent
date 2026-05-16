@@ -4,14 +4,10 @@
     "composite": true,
     "jsx": "react-jsx",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ],
+    "types": ["vite/client"],
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }

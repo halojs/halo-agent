@@ -6,7 +6,6 @@
       "outputs": ["dist/**"]
     },
     "dev": {
-      "dependsOn": ["@halo-ai/contracts#build"],
       "cache": false,
       "persistent": true
     },

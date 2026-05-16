@@ -1,0 +1,11 @@
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility flex-x-center {
+  @apply flex justify-center;
+}
+
+@utility flex-y-center {
+  @apply flex items-center;
+}
