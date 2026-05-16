@@ -1,6 +1,14 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": [".docs", ".plans", ".github", "dist", "node_modules", "*.tsbuildinfo"],
+  "ignorePatterns": [
+    ".docs",
+    ".plans",
+    ".github",
+    "dist",
+    "node_modules",
+    "*.tsbuildinfo",
+    "apps/web/src/routeTree.gen.ts"
+  ],
   "sortImports": {
     "groups": [
       "type-import",
