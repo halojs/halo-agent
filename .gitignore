@@ -11,3 +11,6 @@ tsconfig.tsbuildinfo
 *.log
 *.lock
 *.tgz
+
+# 忽略 routeTree.gen.ts
+apps/web/src/routeTree.gen.ts
