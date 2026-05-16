@@ -96,8 +96,8 @@
   },
   "lint-staged": {
     "*.{tsx,ts}": [
-      "oxlint --fix",
-      "oxfmt"
+      "oxfmt",
+      "oxlint --fix"
     ],
     "*.css": "oxfmt"
   },
