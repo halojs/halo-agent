@@ -11,13 +11,11 @@
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
-      "outputs": [],
       "cache": false
     },
     "test": {
       "dependsOn": ["^build"],
-      "cache": false,
-      "outputs": []
+      "cache": false
     }
   }
 }

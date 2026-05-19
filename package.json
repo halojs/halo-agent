@@ -18,13 +18,17 @@
       "packages/*"
     ],
     "catalogs": {
+      "desktop": {
+        "electron": "^42.1.0",
+        "electron-updater": "^6.8.3"
+      },
       "web": {
         "@base-ui/react": "^1.4.1",
-        "@tanstack/react-query": "^5.100.10",
-        "@tanstack/react-router": "^1.169.2",
+        "@tanstack/react-query": "^5.100.11",
+        "@tanstack/react-router": "^1.170.4",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "motion": "^12.38.0",
+        "motion": "^12.39.0",
         "react-dom": "^19.2.6",
         "react": "^19.2.6",
         "shadcn": "^4.7.0",
@@ -35,36 +39,41 @@
       },
       "assets": {
         "@fontsource-variable/dm-sans": "^5.2.8",
-        "@fontsource-variable/geist": "^5.2.8",
+        "@fontsource-variable/geist": "^5.2.9",
         "lucide-react": "^1.16.0"
       },
       "build": {
-        "lint-staged": "^17.0.4",
-        "oxfmt": "^0.49.0",
-        "oxlint": "^1.64.0",
+        "lint-staged": "^17.0.5",
+        "oxfmt": "^0.51.0",
+        "oxlint": "^1.66.0",
         "simple-git-hooks": "^2.13.1",
         "tsdown": "^0.22.0",
         "turbo": "^2.9.14",
         "typescript": "^6.0.3",
         "vite": "^8.0.13"
       },
+      "prod": {
+        "effect": "^3.21.2"
+      },
       "dev": {
         "@babel/core": "^7.29.0",
         "@rolldown/plugin-babel": "^0.2.3",
         "@tailwindcss/vite": "^4.3.0",
-        "@tanstack/router-plugin": "^1.167.35",
+        "@tanstack/router-plugin": "^1.168.6",
         "@vitejs/plugin-react": "^6.0.2",
         "babel-plugin-react-compiler": "^1.0.0"
       },
       "testing": {
+        "@effect/vitest": "^0.29.0",
         "@testing-library/react": "^16.3.2",
+        "@vitest/coverage-v8": "^4.1.6",
         "jsdom": "^29.1.1",
         "vitest": "^4.1.6"
       },
       "types": {
         "@types/babel__core": "^7.20.5",
         "@types/bun": "1.3.11",
-        "@types/node": "^25.8.0",
+        "@types/node": "^25.9.0",
         "@types/react-dom": "^19.2.3",
         "@types/react": "^19.2.14"
       }

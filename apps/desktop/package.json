@@ -19,12 +19,20 @@
     "format": "oxfmt",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "electron": "catalog:desktop",
+    "electron-updater": "catalog:desktop"
+  },
   "devDependencies": {
-    "@types/bun": "catalog:types",
     "@types/node": "catalog:types",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
     "tsdown": "catalog:build",
     "typescript": "catalog:build"
-  }
+  },
+  "engines": {
+    "bun": "^1.3.12",
+    "node": "^24.14.1"
+  },
+  "packageManager": "bun@1.3.14"
 }
