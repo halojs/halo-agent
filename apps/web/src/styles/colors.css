@@ -1,0 +1,43 @@
+:root {
+  --color-japonica-50: oklch(97.225% 0.01007 48.204);
+  --color-japonica-100: oklch(93.663% 0.02382 50.996);
+  --color-japonica-200: oklch(86.876% 0.04928 48.717);
+  --color-japonica-300: oklch(78.117% 0.08428 44.906);
+  --color-japonica-400: oklch(67.241% 0.13081 38.733);
+  --color-japonica-500: oklch(61.777% 0.15648 35.728);
+  --color-japonica-600: oklch(56.557% 0.16492 31.531);
+  --color-japonica-700: oklch(48.903% 0.147 28.741);
+  --color-japonica-800: oklch(42.35% 0.1194 26.136);
+  --color-japonica-900: oklch(37.232% 0.09561 26.197);
+  --color-japonica-950: oklch(24.511% 0.06248 24.256);
+}
+
+@theme {
+  /* clay */
+  --color-clay-50: oklch(0.972 0.01 48.204);
+  --color-clay-100: oklch(0.937 0.024 50.996);
+  --color-clay-200: oklch(0.869 0.049 48.717);
+  --color-clay-300: oklch(0.781 0.084 44.906);
+  --color-clay-400: oklch(0.672 0.131 38.733);
+  --color-clay-500: oklch(0.618 0.156 35.728);
+  --color-clay-600: oklch(0.566 0.165 31.531);
+  --color-clay-700: oklch(0.489 0.147 28.741);
+  --color-clay-800: oklch(0.424 0.119 26.136);
+  --color-clay-900: oklch(0.372 0.096 26.197);
+  --color-clay-950: oklch(0.245 0.062 24.256);
+
+  /* aqua */
+  --color-aqua-50: oklch(0.983 0.011 176.3);
+  --color-aqua-100: oklch(0.958 0.025 178.4);
+  --color-aqua-200: oklch(0.91 0.051 174.6);
+  --color-aqua-300: oklch(0.855 0.07 175.2);
+  --color-aqua-400: oklch(0.722 0.106 177.8);
+  --color-aqua-500: oklch(0.644 0.106 175.4);
+  --color-aqua-600: oklch(0.58 0.097 176.7);
+  --color-aqua-700: oklch(0.516 0.088 176.3);
+  --color-aqua-800: oklch(0.447 0.076 176.3);
+  --color-aqua-900: oklch(0.373 0.062 177.5);
+  --color-aqua-950: oklch(0.266 0.041 179.4);
+}
+
+@source inline("{text,bg}-{red,orange,clay,amber,yellow,lime,green,emerald,aqua,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose,slate,gray,zinc,neutral,stone,taupe,mauve,mist,olive}-400");

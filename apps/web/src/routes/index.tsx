@@ -1,12 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  staticData: {
-    title: "Welcome",
-  },
-  component: RouteComponent,
+  component: IndexPageView,
 });
 
-function RouteComponent() {
+function IndexPageView() {
   return <div>Hello "/"!</div>;
 }
