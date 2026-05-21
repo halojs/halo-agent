@@ -1,5 +1,8 @@
 import * as Schema from "effect/Schema";
 
+// -----------------------------------------------------------------------------
+// #region (Schemas)
+
 export const Api = Schema.Literal("openai-completions", "openai-responses", "anthropic-messages");
 export type Api = typeof Api.Type;
 
@@ -39,9 +42,10 @@ export const Model = Schema.Struct({
 });
 export type Model = typeof Model.Type;
 
-// =============================================================================
-// Constructors
-// =============================================================================
+// #endregion
+
+// -----------------------------------------------------------------------------
+// #region (Constructors)
 
 export const RawInput = Schema.Struct({
   id: Schema.optional(Schema.NonEmptyTrimmedString),
@@ -87,3 +91,5 @@ export const make = (input: RawInput): Model => {
 
   return Object.assign({}, defaults, parsed);
 };
+
+// #endregion

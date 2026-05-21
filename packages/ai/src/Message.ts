@@ -1,17 +1,17 @@
 import * as Arr from "effect/Array";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
-import * as Model from "../model/model";
+import * as Model from "./Model";
 
 const constEmptyObject = () => ({});
 
 // -----------------------------------------------------------------------------
 // #region (TypeIds)
 
-export const MessageTypeId = "@halo/ai/conversation/message";
+export const MessageTypeId = "@halo/ai/Message";
 export type MessageTypeId = typeof MessageTypeId;
 
-export const ContentTypeId = "@halo/ai/conversation/message/content";
+export const ContentTypeId = "@halo/ai/Message/Content";
 export type ContentTypeId = typeof ContentTypeId;
 
 // #endregion

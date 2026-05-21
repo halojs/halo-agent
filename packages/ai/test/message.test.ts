@@ -1,8 +1,8 @@
 import { it, expect, describe } from "@effect/vitest";
-import * as Message from "~/conversation/message";
+import * as Message from "~/Message";
 
 describe("Message", () => {
-  it("should be make text content", () => {
+  it("should be make a text content", () => {
     const content = Message.textContent({
       text: "Hello, world!",
     });
@@ -12,7 +12,7 @@ describe("Message", () => {
     expect(content).toHaveProperty("text", "Hello, world!");
   });
 
-  it("should be make reasoning content", () => {
+  it("should be make a reasoning content", () => {
     const content = Message.reasoningContent({
       reasoning: "I think this is a test.",
     });
@@ -22,7 +22,7 @@ describe("Message", () => {
     expect(content).toHaveProperty("reasoning", "I think this is a test.");
   });
 
-  it("should be make image content", () => {
+  it("should be make a image content", () => {
     const content = Message.fileContent({
       mediaType: "image/png",
       fileName: "test.png",
@@ -36,7 +36,7 @@ describe("Message", () => {
     expect(content).toHaveProperty("data", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA");
   });
 
-  it("should be make file content with optional fileName", () => {
+  it("should be make a file content with optional fileName", () => {
     const content = Message.fileContent({
       mediaType: "application/pdf",
       data: "data:application/pdf;base64,test",
@@ -49,7 +49,7 @@ describe("Message", () => {
     expect(content).toHaveProperty("data", "data:application/pdf;base64,test");
   });
 
-  it("should be make tool call", () => {
+  it("should be make a tool call", () => {
     const content = Message.toolCall({
       id: "test-tool",
       name: "Test Tool",
@@ -67,7 +67,7 @@ describe("Message", () => {
     });
   });
 
-  it("should be make system message", () => {
+  it("should be make a system message", () => {
     const message = Message.systemMessage({
       content: "System message content",
     });
@@ -79,7 +79,7 @@ describe("Message", () => {
     expect(message).toHaveProperty("timestamp");
   });
 
-  it("should be make user message", () => {
+  it("should be make a user message", () => {
     const message = Message.userMessage({
       content: [
         Message.textContent({
@@ -107,7 +107,7 @@ describe("Message", () => {
     );
   });
 
-  it("should be make assistant message", () => {
+  it("should be make an assistant message", () => {
     const message = Message.assistantMessage({
       api: "openai-completions",
       provider: "openai",
@@ -131,7 +131,7 @@ describe("Message", () => {
     expect(message).toHaveProperty("stopReason", "stop");
   });
 
-  it("should be make tool result message", () => {
+  it("should be make a tool result message", () => {
     const message = Message.toolResultMessage({
       id: "tool-result-1",
       name: "Test Tool",

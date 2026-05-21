@@ -4,10 +4,13 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
-import * as AiError from "~/errors";
-import * as Model from "./model";
+import * as Error from "./Error";
+import * as Model from "./Model";
 
-export class ModelRegistry extends Context.Tag("@halo/ai/model/ModelRegistry")<
+// -----------------------------------------------------------------------------
+// #region (Contexts)
+
+export class ModelRegistry extends Context.Tag("@halo/ai/ModelRegistry")<
   ModelRegistry,
   Service
 >() {}
@@ -21,7 +24,7 @@ export interface Service {
   /**
    * 导出 JSON 格式
    */
-  readonly exportJson: Effect.Effect<string, AiError.InvalidOutputError>;
+  readonly exportJson: Effect.Effect<string, Error.InvalidOutputError>;
 
   /**
    * 获得已注册的模型设置
@@ -36,6 +39,8 @@ export interface Service {
    */
   readonly getModels: (provider: string) => Effect.Effect<Model.Model[], ProviderNotFoundError>;
 }
+
+// #endregion
 
 // -----------------------------------------------------------------------------
 // #region (Constructors)
@@ -91,7 +96,7 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
       }),
       Effect.flatMap(encodeJson),
       Effect.catchTag("ParseError", (error) =>
-        AiError.InvalidOutputError.fromParseError({
+        Error.InvalidOutputError.fromParseError({
           module: "ModelRegistry",
           method: "exportJson",
           description: "Failed to encode model registry",
