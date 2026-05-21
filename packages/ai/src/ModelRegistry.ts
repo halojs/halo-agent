@@ -161,6 +161,30 @@ export const layerFromJson = (data: string): Layer.Layer<ModelRegistry, ParseErr
 // #endregion
 
 // -----------------------------------------------------------------------------
+// #region (Accessors)
+
+export const providers: Effect.Effect<string[], never, ModelRegistry> = Effect.flatMap(
+  ModelRegistry,
+  (service) => service.providers,
+);
+
+export const exportJson: Effect.Effect<string, Error.InvalidOutputError, ModelRegistry> =
+  Effect.flatMap(ModelRegistry, (service) => service.exportJson);
+
+export const getModel = (
+  provider: string,
+  modelId: string,
+): Effect.Effect<Model.Model, ProviderNotFoundError | ModelNotFoundError, ModelRegistry> =>
+  ModelRegistry.pipe(Effect.flatMap((service) => service.getModel(provider, modelId)));
+
+export const getModels = (
+  provider: string,
+): Effect.Effect<Model.Model[], ProviderNotFoundError, ModelRegistry> =>
+  ModelRegistry.pipe(Effect.flatMap((service) => service.getModels(provider)));
+
+// #endregion
+
+// -----------------------------------------------------------------------------
 // #region (Errors)
 
 export class ProviderNotFoundError extends Schema.TaggedError<ProviderNotFoundError>(

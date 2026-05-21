@@ -138,4 +138,22 @@ describe("Model", () => {
       expect(Exit.isFailure(exit)).toBe(true);
     }),
   );
+
+  it.scoped("should use registry with layer", () =>
+    Effect.gen(function* () {
+      const ModelRegistryLive = ModelRegistry.layer({
+        deepseek: {
+          "deepseek-v4-flash": {
+            name: "Deepseek V4 Flash",
+            baseURL: "https://api.deepseek.com",
+            apiKey: "DEEPSEEP_API_KEY",
+          },
+        },
+      });
+
+      const result = yield* ModelRegistry.providers.pipe(Effect.provide(ModelRegistryLive));
+
+      expect(result).toEqual(["deepseek"]);
+    }),
+  );
 });
