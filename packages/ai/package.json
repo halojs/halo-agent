@@ -25,13 +25,15 @@
     "format": "oxfmt",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "prepare": "effect-language-service patch"
   },
   "dependencies": {
-    "@halo-ai/contracts": "workspace:",
     "effect": "catalog:prod"
   },
   "devDependencies": {
+    "@effect/experimental": "catalog:dev",
+    "@effect/language-service": "catalog:dev",
     "@effect/vitest": "catalog:testing",
     "@vitest/coverage-v8": "catalog:testing",
     "oxfmt": "catalog:build",
