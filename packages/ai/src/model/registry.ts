@@ -1,13 +1,16 @@
 import type { ParseError } from "effect/ParseResult";
-import { Model } from "@halo-ai/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
-import * as LlmError from "~/errors";
+import * as AiError from "~/errors";
+import * as Model from "./model";
 
-export class Registry extends Context.Tag("@halo/ai/model/ModelRegistry")<Registry, Service>() {}
+export class ModelRegistry extends Context.Tag("@halo/ai/model/ModelRegistry")<
+  ModelRegistry,
+  Service
+>() {}
 
 export interface Service {
   /**
@@ -18,7 +21,7 @@ export interface Service {
   /**
    * 导出 JSON 格式
    */
-  readonly exportJson: Effect.Effect<string, LlmError.InvalidOutputError>;
+  readonly exportJson: Effect.Effect<string, AiError.InvalidOutputError>;
 
   /**
    * 获得已注册的模型设置
@@ -34,54 +37,8 @@ export interface Service {
   readonly getModels: (provider: string) => Effect.Effect<Model.Model[], ProviderNotFoundError>;
 }
 
-// =============================================================================
-// Constructors
-// =============================================================================
-
-export const RawInputModel = Schema.Struct({
-  id: Schema.optional(Schema.NonEmptyTrimmedString),
-  name: Schema.optional(Schema.NonEmptyTrimmedString),
-  api: Schema.optional(Schema.NonEmptyTrimmedString),
-  provider: Schema.optional(Schema.NonEmptyTrimmedString),
-  baseURL: Schema.NonEmptyTrimmedString,
-  apiKey: Schema.NonEmptyTrimmedString,
-  reasoning: Schema.optional(Schema.Boolean),
-  reasoningEffortMap: Schema.optional(Model.ReasoningEffortMap),
-  input: Schema.optional(Schema.Array(Schema.Literal("text", "image"))),
-  contextWindow: Schema.optional(Schema.NonNegative),
-  maxTokens: Schema.optional(Schema.NonNegative),
-  cost: Schema.optional(Model.Cost),
-  headers: Schema.optional(
-    Schema.Record({ key: Schema.NonEmptyTrimmedString, value: Schema.NonEmptyTrimmedString }),
-  ),
-});
-export type RawInputModel = typeof RawInputModel.Type;
-
-const decodeUnknownModel = Schema.decodeUnknownSync(RawInputModel);
-
-export const makeModel = (input: RawInputModel): Model.Model => {
-  const defaults = {
-    id: "",
-    name: "",
-    api: "openai-completions" as const,
-    provider: "",
-    reasoning: false as const,
-    input: ["text"] as const,
-    contextWindow: 0,
-    maxTokens: 0,
-    cost: {
-      input: 0,
-      output: 0,
-      reasoning: 0,
-      cacheRead: 0,
-      cacheWrite: 0,
-    },
-  };
-
-  const parsed = decodeUnknownModel(input);
-
-  return Object.assign({}, defaults, parsed);
-};
+// -----------------------------------------------------------------------------
+// #region (Constructors)
 
 const FromJson = Schema.parseJson(
   Schema.Record({
@@ -96,9 +53,8 @@ const FromJson = Schema.parseJson(
 const encodeJson = Schema.encode(FromJson);
 const decodeJson = Schema.decodeUnknown(FromJson);
 
-type RegistedModels = Map<string, Map<string, Model.Model>>;
-
-export type RawInput = Record<string, Record<string, RawInputModel>>;
+export type RawInput = Record<string, Record<string, Model.RawInput>>;
+export type RegistedModels = Map<string, Map<string, Model.Model>>;
 
 /**
  * 构造模型注册器
@@ -109,14 +65,14 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
   for (const [provider, models] of Object.entries(input)) {
     const providerModels = new Map<string, Model.Model>();
     for (const [id, model] of Object.entries(models)) {
-      providerModels.set(id, makeModel({ id, provider, ...model }));
+      providerModels.set(id, Model.make({ id, provider, ...model }));
     }
     registed.set(provider, providerModels);
   }
 
   const modelRegistry = yield* Ref.make<RegistedModels>(registed);
 
-  return Registry.of({
+  return ModelRegistry.of({
     providers: Ref.get(modelRegistry).pipe(
       Effect.map((registry) => Array.from(registry.keys())),
       Effect.withSpan("ModelRegistry.providers"),
@@ -135,7 +91,7 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
       }),
       Effect.flatMap(encodeJson),
       Effect.catchTag("ParseError", (error) =>
-        LlmError.InvalidOutputError.fromParseError({
+        AiError.InvalidOutputError.fromParseError({
           module: "ModelRegistry",
           method: "exportJson",
           description: "Failed to encode model registry",
@@ -180,21 +136,27 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
 export const fromJson = (data: string): Effect.Effect<Service, ParseError> =>
   Effect.flatMap(decodeJson(data), make);
 
+// #endregion
+
+// -----------------------------------------------------------------------------
+// #region (Layers)
+
 /**
  * 构造 ModelRegistryLayer
  */
-export const layer = (input: RawInput): Layer.Layer<Registry> =>
-  Layer.effect(Registry, make(input));
+export const layer = (input: RawInput): Layer.Layer<ModelRegistry> =>
+  Layer.effect(ModelRegistry, make(input));
 
 /**
  * 从 JSON 构造 ModelRegistryLayer
  */
-export const layerFromJson = (data: string): Layer.Layer<Registry, ParseError> =>
-  Layer.effect(Registry, fromJson(data));
+export const layerFromJson = (data: string): Layer.Layer<ModelRegistry, ParseError> =>
+  Layer.effect(ModelRegistry, fromJson(data));
 
-// =============================================================================
-// Errors
-// =============================================================================
+// #endregion
+
+// -----------------------------------------------------------------------------
+// #region (Errors)
 
 export class ProviderNotFoundError extends Schema.TaggedError<ProviderNotFoundError>(
   "@halo/ai/model/ProviderNotFoundError",
@@ -203,3 +165,5 @@ export class ProviderNotFoundError extends Schema.TaggedError<ProviderNotFoundEr
 export class ModelNotFoundError extends Schema.TaggedError<ModelNotFoundError>(
   "@halo/ai/model/ModelNotFoundError",
 )("ModelNotFoundError", { provider: Schema.String, modelId: Schema.String }) {}
+
+// #endregion
