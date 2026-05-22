@@ -47,6 +47,19 @@ export const isContent = (u: unknown): u is Content => Predicate.hasProperty(u, 
 // #endregion
 
 // -----------------------------------------------------------------------------
+// #region (Usage)
+
+export class Usage extends Schema.Class<Usage>("@halo/ai/Message/Usage")({
+  input: Schema.NonNegative,
+  output: Schema.NonNegative,
+  reasoning: Schema.optional(Schema.NonNegative),
+  cacheRead: Schema.optional(Schema.NonNegative),
+  cacheWrite: Schema.optional(Schema.NonNegative),
+}) {}
+
+// #endregion
+
+// -----------------------------------------------------------------------------
 // #region (Base Content)
 
 interface BaseContent<Type extends string, Options extends ProviderOptions> {
