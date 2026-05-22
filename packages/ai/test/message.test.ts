@@ -59,7 +59,7 @@ describe("Message", () => {
     });
 
     expect(Message.isContent(content)).toBe(true);
-    expect(content).toHaveProperty("type", "toolCall");
+    expect(content).toHaveProperty("type", "tool-call");
     expect(content).toHaveProperty("id", "test-tool");
     expect(content).toHaveProperty("name", "Test Tool");
     expect(content).toHaveProperty("arguments", {
@@ -143,7 +143,7 @@ describe("Message", () => {
     });
 
     expect(Message.isMessage(message)).toBe(true);
-    expect(message).toHaveProperty("role", "toolResult");
+    expect(message).toHaveProperty("role", "tool-result");
     expect(message).toHaveProperty("id", "tool-result-1");
     expect(message).toHaveProperty("name", "Test Tool");
     expect(message.content).toHaveLength(1);

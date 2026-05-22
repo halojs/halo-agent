@@ -186,13 +186,13 @@ export const fileContent = (params: ContentConstructorParams<FileContent>): File
 // -----------------------------------------------------------------------------
 // #region (ToolCall)
 
-export interface ToolCall extends BaseContent<"toolCall", ToolCallOptions> {
+export interface ToolCall extends BaseContent<"tool-call", ToolCallOptions> {
   readonly id: string;
   readonly name: string;
   readonly arguments: Record<string, any>;
 }
 
-export interface ToolCallEncoded extends BaseContentEncoded<"toolCall", ToolCallOptions> {
+export interface ToolCallEncoded extends BaseContentEncoded<"tool-call", ToolCallOptions> {
   readonly id: string;
   readonly name: string;
   readonly arguments: Record<string, any>;
@@ -201,7 +201,7 @@ export interface ToolCallEncoded extends BaseContentEncoded<"toolCall", ToolCall
 export interface ToolCallOptions extends ProviderOptions {}
 
 export const ToolCall: Schema.Schema<ToolCall, ToolCallEncoded> = Schema.Struct({
-  type: Schema.Literal("toolCall"),
+  type: Schema.Literal("tool-call"),
   id: Schema.String,
   name: Schema.String,
   arguments: Schema.Record({ key: Schema.String, value: Schema.Any }),
@@ -212,7 +212,7 @@ export const ToolCall: Schema.Schema<ToolCall, ToolCallEncoded> = Schema.Struct(
 );
 
 export const toolCall = (params: ContentConstructorParams<ToolCall>): ToolCall =>
-  makeContent("toolCall", params);
+  makeContent("tool-call", params);
 
 // #endregion
 
@@ -398,7 +398,7 @@ export const assistantMessage = (
 // -----------------------------------------------------------------------------
 // #region (Tool Result Message)
 
-export interface ToolResultMessage extends BaseMessage<"toolResult", ToolResultMessageOptions> {
+export interface ToolResultMessage extends BaseMessage<"tool-result", ToolResultMessageOptions> {
   readonly id: string;
   readonly name: string;
   readonly content: ReadonlyArray<ToolResultContent>;
@@ -407,7 +407,7 @@ export interface ToolResultMessage extends BaseMessage<"toolResult", ToolResultM
 export type ToolResultContent = TextContent | FileContent;
 
 export interface ToolResultMessageEncoded extends BaseMessageEncoded<
-  "toolResult",
+  "tool-result",
   ToolResultMessageOptions
 > {
   readonly id: string;
@@ -421,7 +421,7 @@ export interface ToolResultMessageOptions extends ProviderOptions {}
 
 export const ToolResultMessage: Schema.Schema<ToolResultMessage, ToolResultMessageEncoded> =
   Schema.Struct({
-    role: Schema.Literal("toolResult"),
+    role: Schema.Literal("tool-result"),
     id: Schema.String,
     name: Schema.String,
     content: Schema.Array(Schema.Union(TextContent, FileContent)),
@@ -434,7 +434,7 @@ export const ToolResultMessage: Schema.Schema<ToolResultMessage, ToolResultMessa
 
 export const toolResultMessage = (
   params: MessageConstructorParams<ToolResultMessage>,
-): ToolResultMessage => makeMessage("toolResult", params);
+): ToolResultMessage => makeMessage("tool-result", params);
 
 // #endregion
 
