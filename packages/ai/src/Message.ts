@@ -8,8 +8,8 @@ const constEmptyObject = () => ({});
 // -----------------------------------------------------------------------------
 // #region (TypeIds)
 
-export const MessageTypeId = "@halo/ai/Message";
-export type MessageTypeId = typeof MessageTypeId;
+export const TypeId = "@halo/ai/Message";
+export type TypeId = typeof TypeId;
 
 export const ContentTypeId = "@halo/ai/Message/Content";
 export type ContentTypeId = typeof ContentTypeId;
@@ -38,7 +38,7 @@ type ProviderOptions = typeof ProviderOptions.Type;
 
 export type Message = SystemMessage | UserMessage | AssistantMessage | ToolResultMessage;
 
-export const isMessage = (u: unknown): u is Message => Predicate.hasProperty(u, MessageTypeId);
+export const isMessage = (u: unknown): u is Message => Predicate.hasProperty(u, TypeId);
 
 export type Content = TextContent | ReasoningContent | FileContent | ToolCall;
 
@@ -220,7 +220,7 @@ export const toolCall = (params: ContentConstructorParams<ToolCall>): ToolCall =
 // #region (Base Message)
 
 export interface BaseMessage<Role extends string, Options extends ProviderOptions> {
-  readonly [MessageTypeId]: MessageTypeId;
+  readonly [TypeId]: TypeId;
   readonly role: Role;
   readonly options: Options;
   readonly timestamp: number;
@@ -234,16 +234,13 @@ export interface BaseMessageEncoded<Role extends string, Options extends Provide
 
 export const makeMessage = <const Role extends Message["role"]>(
   role: Role,
-  params: Omit<
-    Extract<Message, { role: Role }>,
-    MessageTypeId | "role" | "options" | "timestamp"
-  > & {
+  params: Omit<Extract<Message, { role: Role }>, TypeId | "role" | "options" | "timestamp"> & {
     readonly options?: Extract<Message, { role: Role }>["options"];
   },
 ): Extract<Message, { role: Role }> =>
   ({
     ...params,
-    [MessageTypeId]: MessageTypeId,
+    [TypeId]: TypeId,
     role,
     options: params.options ?? {},
     timestamp: Date.now(),
@@ -251,7 +248,7 @@ export const makeMessage = <const Role extends Message["role"]>(
 
 export type MessageConstructorParams<M extends Message> = Omit<
   M,
-  MessageTypeId | "role" | "options" | "timestamp"
+  TypeId | "role" | "options" | "timestamp"
 > & {
   /**
    * Optional provider-specific options for this message.
@@ -289,7 +286,7 @@ export const SystemMessage: Schema.Schema<SystemMessage, SystemMessageEncoded> =
   options: Schema.optionalWith(ProviderOptions, { default: constEmptyObject }),
   timestamp: Schema.Number,
 }).pipe(
-  Schema.attachPropertySignature(MessageTypeId, MessageTypeId),
+  Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "SystemMessage" }),
 );
 
@@ -324,7 +321,7 @@ export const UserMessage: Schema.Schema<UserMessage, UserMessageEncoded> = Schem
   options: Schema.optionalWith(ProviderOptions, { default: constEmptyObject }),
   timestamp: Schema.Number,
 }).pipe(
-  Schema.attachPropertySignature(MessageTypeId, MessageTypeId),
+  Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "UserMessage" }),
 );
 
@@ -385,7 +382,7 @@ export const AssistantMessage: Schema.Schema<AssistantMessage, AssistantMessageE
     options: Schema.optionalWith(ProviderOptions, { default: constEmptyObject }),
     timestamp: Schema.Number,
   }).pipe(
-    Schema.attachPropertySignature(MessageTypeId, MessageTypeId),
+    Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "AssistantMessage" }),
   );
 
@@ -428,7 +425,7 @@ export const ToolResultMessage: Schema.Schema<ToolResultMessage, ToolResultMessa
     options: Schema.optionalWith(ProviderOptions, { default: constEmptyObject }),
     timestamp: Schema.Number,
   }).pipe(
-    Schema.attachPropertySignature(MessageTypeId, MessageTypeId),
+    Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ToolResultMessage" }),
   );
 
