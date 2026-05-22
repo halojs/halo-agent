@@ -2,7 +2,7 @@ import type { ParseError } from "effect/ParseResult";
 import * as Schema from "effect/Schema";
 
 // -----------------------------------------------------------------------------
-// #region (Invalid Errors)
+// #region (Invalid Output Error)
 
 export class InvalidOutputError extends Schema.TaggedError<InvalidOutputError>(
   "@halo/ai/Error/InvalidOutputError",
