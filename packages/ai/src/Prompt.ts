@@ -504,19 +504,6 @@ export const Message: Schema.Schema<Message, MessageEncoded> = Schema.Union(
 // #endregion
 
 // -----------------------------------------------------------------------------
-// #region (Usage)
-
-export class Usage extends Schema.Class<Usage>("@halo/ai/Message/Usage")({
-  input: Schema.NonNegative,
-  output: Schema.NonNegative,
-  reasoning: Schema.optional(Schema.NonNegative),
-  cacheRead: Schema.optional(Schema.NonNegative),
-  cacheWrite: Schema.optional(Schema.NonNegative),
-}) {}
-
-// #endregion
-
-// -----------------------------------------------------------------------------
 // #region (Prompt)
 
 export const TypeId = "@halo/ai/Prompt";
@@ -535,7 +522,7 @@ export interface PromptEncoded {
 }
 
 export class PromptFromSelf extends Schema.declare((u) => isPrompt(u), {
-  typeConstructor: { _tag: "effect/ai/Prompt" },
+  typeConstructor: { _tag: "@halo/ai/Prompt" },
   identifier: "PromptFromSelf",
   description: "a Prompt instance",
   arbitrary: (): Arbitrary.LazyArbitrary<Prompt> => (fc) =>

@@ -4,7 +4,7 @@
  * 旨在提供一个统一的接口，供不同的 LLM 事件流实现，以便于在不同的 LLM 交互过程中使用相同的事件处理逻辑。
  */
 import * as Schema from "effect/Schema";
-import * as Message from "./Prompt";
+import * as Prompt from "./Prompt";
 
 // -----------------------------------------------------------------------------
 // #region (TypeIds)
@@ -31,6 +31,19 @@ export type EventStream =
   | ToolCallEndEvent
   | DoneEvent
   | ErrorEvent;
+
+// #endregion
+
+// -----------------------------------------------------------------------------
+// #region (Usage)
+
+export class Usage extends Schema.Class<Usage>("@halo/ai/EventStream/Usage")({
+  input: Schema.NonNegative,
+  output: Schema.NonNegative,
+  reasoning: Schema.optional(Schema.NonNegative),
+  cacheRead: Schema.optional(Schema.NonNegative),
+  cacheWrite: Schema.optional(Schema.NonNegative),
+}) {}
 
 // #endregion
 
@@ -64,16 +77,16 @@ export type EventConstructorParams<P extends EventStream> = Omit<P, TypeId | "ty
 // #region (Start Event)
 
 export interface StartEvent extends BaseEvent<"start"> {
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface StartEventEncoded extends BaseEventEncoded<"start"> {
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const StartEvent: Schema.Schema<StartEvent, StartEventEncoded> = Schema.Struct({
   type: Schema.Literal("start"),
-  partial: Message.AssistantMessage,
+  partial: Prompt.AssistantMessage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "StartEvent" }),
@@ -89,18 +102,18 @@ export const startEvent = (params: EventConstructorParams<StartEvent>): StartEve
 
 export interface TextStartEvent extends BaseEvent<"text-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface TextStartEventEncoded extends BaseEventEncoded<"text-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const TextStartEvent: Schema.Schema<TextStartEvent, TextStartEventEncoded> = Schema.Struct({
   type: Schema.Literal("text-start"),
   contentIndex: Schema.Number,
-  partial: Message.AssistantMessage,
+  partial: Prompt.AssistantMessage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "TextStartEvent" }),
@@ -117,20 +130,20 @@ export const textStartEvent = (params: EventConstructorParams<TextStartEvent>): 
 export interface TextDeltaEvent extends BaseEvent<"text-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface TextDeltaEventEncoded extends BaseEventEncoded<"text-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const TextDeltaEvent: Schema.Schema<TextDeltaEvent, TextDeltaEventEncoded> = Schema.Struct({
   type: Schema.Literal("text-delta"),
   contentIndex: Schema.Number,
   delta: Schema.String,
-  partial: Message.AssistantMessage,
+  partial: Prompt.AssistantMessage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "TextDeltaEvent" }),
@@ -147,20 +160,20 @@ export const textDeltaEvent = (params: EventConstructorParams<TextDeltaEvent>): 
 export interface TextEndEvent extends BaseEvent<"text-end"> {
   readonly contentIndex: number;
   readonly content: string;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface TextEndEventEncoded extends BaseEventEncoded<"text-end"> {
   readonly contentIndex: number;
   readonly content: string;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const TextEndEvent: Schema.Schema<TextEndEvent, TextEndEventEncoded> = Schema.Struct({
   type: Schema.Literal("text-end"),
   contentIndex: Schema.Number,
   content: Schema.String,
-  partial: Message.AssistantMessage,
+  partial: Prompt.AssistantMessage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "TextEndEvent" }),
@@ -176,19 +189,19 @@ export const textEndEvent = (params: EventConstructorParams<TextEndEvent>): Text
 
 export interface ReasoningStartEvent extends BaseEvent<"reasoning-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ReasoningStartEventEncoded extends BaseEventEncoded<"reasoning-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ReasoningStartEvent: Schema.Schema<ReasoningStartEvent, ReasoningStartEventEncoded> =
   Schema.Struct({
     type: Schema.Literal("reasoning-start"),
     contentIndex: Schema.Number,
-    partial: Message.AssistantMessage,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ReasoningStartEvent" }),
@@ -206,13 +219,13 @@ export const reasoningStartEvent = (
 export interface ReasoningDeltaEvent extends BaseEvent<"reasoning-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ReasoningDeltaEventEncoded extends BaseEventEncoded<"reasoning-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ReasoningDeltaEvent: Schema.Schema<ReasoningDeltaEvent, ReasoningDeltaEventEncoded> =
@@ -220,7 +233,7 @@ export const ReasoningDeltaEvent: Schema.Schema<ReasoningDeltaEvent, ReasoningDe
     type: Schema.Literal("reasoning-delta"),
     contentIndex: Schema.Number,
     delta: Schema.String,
-    partial: Message.AssistantMessage,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ReasoningDeltaEvent" }),
@@ -238,13 +251,13 @@ export const reasoningDeltaEvent = (
 export interface ReasoningEndEvent extends BaseEvent<"reasoning-end"> {
   readonly contentIndex: number;
   readonly content: string;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ReasoningEndEventEncoded extends BaseEventEncoded<"reasoning-end"> {
   readonly contentIndex: number;
   readonly content: string;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ReasoningEndEvent: Schema.Schema<ReasoningEndEvent, ReasoningEndEventEncoded> =
@@ -252,7 +265,7 @@ export const ReasoningEndEvent: Schema.Schema<ReasoningEndEvent, ReasoningEndEve
     type: Schema.Literal("reasoning-end"),
     contentIndex: Schema.Number,
     content: Schema.String,
-    partial: Message.AssistantMessage,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ReasoningEndEvent" }),
@@ -269,19 +282,19 @@ export const reasoningEndEvent = (
 
 export interface ToolCallStartEvent extends BaseEvent<"toolcall-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ToolCallStartEventEncoded extends BaseEventEncoded<"toolcall-start"> {
   readonly contentIndex: number;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ToolCallStartEvent: Schema.Schema<ToolCallStartEvent, ToolCallStartEventEncoded> =
   Schema.Struct({
     type: Schema.Literal("toolcall-start"),
     contentIndex: Schema.Number,
-    partial: Message.AssistantMessage,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ToolCallStartEvent" }),
@@ -299,13 +312,13 @@ export const toolCallStartEvent = (
 export interface ToolCallDeltaEvent extends BaseEvent<"toolcall-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessage;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ToolCallDeltaEventEncoded extends BaseEventEncoded<"toolcall-delta"> {
   readonly contentIndex: number;
   readonly delta: string;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ToolCallDeltaEvent: Schema.Schema<ToolCallDeltaEvent, ToolCallDeltaEventEncoded> =
@@ -313,7 +326,7 @@ export const ToolCallDeltaEvent: Schema.Schema<ToolCallDeltaEvent, ToolCallDelta
     type: Schema.Literal("toolcall-delta"),
     contentIndex: Schema.Number,
     delta: Schema.String,
-    partial: Message.AssistantMessage,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ToolCallDeltaEvent" }),
@@ -330,22 +343,22 @@ export const toolCallDeltaEvent = (
 
 export interface ToolCallEndEvent extends BaseEvent<"toolcall-end"> {
   readonly contentIndex: number;
-  readonly toolCall: Message.ToolCall;
-  readonly partial: Message.AssistantMessage;
+  readonly toolCall: Prompt.ToolCall;
+  readonly partial: Prompt.AssistantMessage;
 }
 
 export interface ToolCallEndEventEncoded extends BaseEventEncoded<"toolcall-end"> {
   readonly contentIndex: number;
-  readonly toolCall: Message.ToolCallEncoded;
-  readonly partial: Message.AssistantMessageEncoded;
+  readonly toolCall: Prompt.ToolCallEncoded;
+  readonly partial: Prompt.AssistantMessageEncoded;
 }
 
 export const ToolCallEndEvent: Schema.Schema<ToolCallEndEvent, ToolCallEndEventEncoded> =
   Schema.Struct({
     type: Schema.Literal("toolcall-end"),
     contentIndex: Schema.Number,
-    toolCall: Message.ToolCall,
-    partial: Message.AssistantMessage,
+    toolCall: Prompt.ToolCall,
+    partial: Prompt.AssistantMessage,
   }).pipe(
     Schema.attachPropertySignature(TypeId, TypeId),
     Schema.annotations({ identifier: "ToolCallEndEvent" }),
@@ -361,22 +374,22 @@ export const toolCallEndEvent = (
 // #region (Done Event)
 
 export interface DoneEvent extends BaseEvent<"done"> {
-  reason: Extract<Message.StopReason, "stop" | "length" | "toolUse">;
-  message: Message.AssistantMessage;
-  usage: Message.Usage;
+  reason: Extract<Prompt.StopReason, "stop" | "length" | "toolUse">;
+  message: Prompt.AssistantMessage;
+  usage: Usage;
 }
 
 export interface DoneEventEncoded extends BaseEventEncoded<"done"> {
-  reason: Extract<Message.StopReason, "stop" | "length" | "toolUse">;
-  message: Message.AssistantMessageEncoded;
-  usage: Message.Usage;
+  reason: Extract<Prompt.StopReason, "stop" | "length" | "toolUse">;
+  message: Prompt.AssistantMessageEncoded;
+  usage: Usage;
 }
 
 export const DoneEvent: Schema.Schema<DoneEvent, DoneEventEncoded> = Schema.Struct({
   type: Schema.Literal("done"),
   reason: Schema.Literal("stop", "length", "toolUse"),
-  message: Message.AssistantMessage,
-  usage: Message.Usage,
+  message: Prompt.AssistantMessage,
+  usage: Usage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "DoneEvent" }),
@@ -391,19 +404,19 @@ export const doneEvent = (params: EventConstructorParams<DoneEvent>): DoneEvent 
 // #region (Error Event)
 
 export interface ErrorEvent extends BaseEvent<"error"> {
-  reason: Extract<Message.StopReason, "aborted" | "error">;
-  error: Message.AssistantMessage;
+  reason: Extract<Prompt.StopReason, "aborted" | "error">;
+  error: Prompt.AssistantMessage;
 }
 
 export interface ErrorEventEncoded extends BaseEventEncoded<"error"> {
-  reason: Extract<Message.StopReason, "aborted" | "error">;
-  error: Message.AssistantMessageEncoded;
+  reason: Extract<Prompt.StopReason, "aborted" | "error">;
+  error: Prompt.AssistantMessageEncoded;
 }
 
 export const ErrorEvent: Schema.Schema<ErrorEvent, ErrorEventEncoded> = Schema.Struct({
   type: Schema.Literal("error"),
   reason: Schema.Literal("error", "aborted"),
-  error: Message.AssistantMessage,
+  error: Prompt.AssistantMessage,
 }).pipe(
   Schema.attachPropertySignature(TypeId, TypeId),
   Schema.annotations({ identifier: "ErrorEvent" }),
