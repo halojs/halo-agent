@@ -1,8 +1,10 @@
 import type { Covariant } from "effect/Types";
 import { identity } from "effect/Function";
+import * as JsonSchema from "effect/JSONSchema";
 import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
+import * as AST from "effect/SchemaAST";
 
 // -----------------------------------------------------------------------------
 // #region (Tool)
@@ -39,7 +41,7 @@ export interface Tool<
   /**
    * 工具参数结构定义
    */
-  readonly parameters: Parameters;
+  readonly parameters: Schema.Struct<Parameters>;
   /**
    * 工具执行模式，决定多个工具调用时的执行方式
    */
@@ -78,3 +80,37 @@ export const make = <const Name extends string, Parameters extends Schema.Struct
 };
 
 // #endregion
+
+// -----------------------------------------------------------------------------
+// #region (Utilities)
+
+/**
+ * 获得工具的 JSON Schema
+ *
+ * @category Utilities
+ */
+export const getJsonSchema = <
+  const Name extends string,
+  Parameters extends Schema.Struct.Fields = {},
+>(
+  tool: Tool<Name, Parameters>,
+): JsonSchema.JsonSchema7 => getJsonSchemaFromSchemaAst(tool.parameters.ast);
+
+/**
+ * 根据 Schema AST 返回 JSON Schema
+ *
+ * @category Utilities
+ */
+export const getJsonSchemaFromSchemaAst = (ast: AST.AST): JsonSchema.JsonSchema7 => {
+  const $defs = {};
+  const schema = JsonSchema.fromAST(ast, {
+    definitions: $defs,
+    topLevelReferenceStrategy: "skip",
+  });
+
+  if (Object.keys($defs).length === 0) return schema;
+  (schema as any).$defs = $defs;
+  return schema;
+};
+
+// #region
