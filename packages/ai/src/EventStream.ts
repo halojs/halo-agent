@@ -4,12 +4,13 @@
  * 旨在提供一个统一的接口，供不同的 LLM 事件流实现，以便于在不同的 LLM 交互过程中使用相同的事件处理逻辑。
  */
 import * as Schema from "effect/Schema";
-import * as Message from "./Message";
+import * as Message from "./Prompt";
 
 // -----------------------------------------------------------------------------
 // #region (TypeIds)
 
 export const TypeId = "@halo/ai/EventStream";
+
 export type TypeId = typeof TypeId;
 
 // #endregion

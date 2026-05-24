@@ -11,9 +11,14 @@ export * as Model from "./Model";
 export * as ModelRegistry from "./ModelRegistry";
 
 /**
- * 对话消息
+ *  统一 LLM 响应事件流
  */
-export * as Message from "./Message";
+export * as EventStream from "./EventStream";
+
+/**
+ * 提示词
+ */
+export * as Prompt from "./Prompt";
 
 /**
  * 工具定义
