@@ -1,62 +1,80 @@
+import type { Covariant } from "effect/Types";
+import { identity } from "effect/Function";
+import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 
 // -----------------------------------------------------------------------------
-// #region (TypeIds)
+// #region (Tool)
 
 export const TypeId = "@effect/ai/Tool";
+
 export type TypeId = typeof TypeId;
-
-// #endregion
-
-// -----------------------------------------------------------------------------
-// #region (Type Guards)
 
 export const isTool = (u: unknown): u is Tool<string> => Predicate.hasProperty(u, TypeId);
 
-// #endregion
+export type ExecutionMode = "sequential" | "parallel";
 
-// -----------------------------------------------------------------------------
-// #region (Tool)
+export type FailureMode = "error" | "return";
 
-export interface Tool<Name extends string = string, Parameters extends Schema.Struct.Fields = {}> {
-  readonly [TypeId]: TypeId;
-  readonly id: string;
-  readonly name: Name;
-  readonly description: string;
-  readonly parameters: Parameters;
-}
-
-export interface ToolEncoded<
+export interface Tool<
   Name extends string = string,
   Parameters extends Schema.Struct.Fields = {},
-> {
-  readonly id: string;
+> extends Pipeable {
+  readonly [TypeId]: {
+    readonly _Requirements: Covariant<any>;
+  };
+  /**
+   * 工具名称
+   */
   readonly name: Name;
+  /**
+   * 工具显示名称，用于 UI 展示
+   */
+  readonly label: string;
+  /**
+   * 工具描述信息
+   */
   readonly description: string;
-  readonly parameters?: Parameters;
+  /**
+   * 工具参数结构定义
+   */
+  readonly parameters: Parameters;
+  /**
+   * 工具执行模式，决定多个工具调用时的执行方式
+   */
+  readonly executionMode: ExecutionMode;
+  /**
+   * 工具失败模式，决定工具执行失败时的处理方式
+   */
+  readonly failureMode: FailureMode;
 }
 
-export const Tool: Schema.Schema<Tool, ToolEncoded> = Schema.Struct({
-  id: Schema.String,
-  name: Schema.String,
-  description: Schema.String,
-  parameters: Schema.optionalWith(Schema.Struct({}), {
-    default: () => ({}),
-  }),
-}).pipe(Schema.attachPropertySignature(TypeId, TypeId), Schema.annotations({ identifier: "Tool" }));
-
-export const make = <const Name extends Tool["name"]>(
-  name: Name,
-  params: Omit<Tool<Name>, TypeId | "id" | "name" | "parameters"> & {
-    parameters?: Extract<Tool<Name>, { name: Name }>["parameters"];
+const Proto = {
+  [TypeId]: { _Requirements: identity },
+  pipe() {
+    return pipeArguments(this, arguments);
   },
-): Extract<Tool<Name>, { name: Name }> => ({
-  ...params,
-  [TypeId]: TypeId,
-  id: `@halo/ai/Tool/${name}`,
-  name,
-  parameters: params.parameters ?? {},
-});
+};
+
+export const make = <const Name extends string, Parameters extends Schema.Struct.Fields = {}>(
+  name: Name,
+  options?: {
+    readonly label: string;
+    readonly description: string;
+    readonly parameters?: Parameters;
+    readonly executionMode?: ExecutionMode;
+    readonly failureMode?: FailureMode;
+  },
+): Tool<Name, Parameters> => {
+  return Object.assign(Object.create(Proto), {
+    name,
+    label: options?.label || name,
+    description: options?.description,
+    parameters: options?.parameters ? Schema.Struct(options?.parameters as any) : Schema.Struct({}),
+    executionMode: options?.executionMode ?? "sequential",
+    failureMode: options?.failureMode ?? "error",
+  });
+};
 
 // #endregion
