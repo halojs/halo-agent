@@ -28,4 +28,4 @@ export * as Tool from "./Tool";
 /**
  * 通用错误
  */
-export * as Error from "./Error";
+export * as AiError from "./AiError";

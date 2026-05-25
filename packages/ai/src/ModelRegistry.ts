@@ -4,7 +4,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
-import * as Error from "./Error";
+import * as AiError from "./AiError";
 import * as Model from "./Model";
 
 // -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ export interface Service {
   /**
    * 导出 JSON 格式
    */
-  readonly exportJson: Effect.Effect<string, Error.InvalidOutputError>;
+  readonly exportJson: Effect.Effect<string, AiError.AiError>;
 
   /**
    * 获得已注册的模型设置
@@ -96,7 +96,7 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
       }),
       Effect.flatMap(encodeJson),
       Effect.catchTag("ParseError", (error) =>
-        Error.InvalidOutputError.fromParseError({
+        AiError.InvalidOutputError.fromParseError({
           module: "ModelRegistry",
           method: "exportJson",
           description: "Failed to encode model registry",
@@ -168,8 +168,10 @@ export const providers: Effect.Effect<string[], never, ModelRegistry> = Effect.f
   (service) => service.providers,
 );
 
-export const exportJson: Effect.Effect<string, Error.InvalidOutputError, ModelRegistry> =
-  Effect.flatMap(ModelRegistry, (service) => service.exportJson);
+export const exportJson: Effect.Effect<string, AiError.AiError, ModelRegistry> = Effect.flatMap(
+  ModelRegistry,
+  (service) => service.exportJson,
+);
 
 export const getModel = (
   provider: string,
