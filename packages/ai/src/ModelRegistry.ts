@@ -8,7 +8,7 @@ import * as AiError from "./AiError";
 import * as Model from "./Model";
 
 // -----------------------------------------------------------------------------
-// #region (Contexts)
+// #region (Model Registry)
 
 export class ModelRegistry extends Context.Tag("@halo/ai/ModelRegistry")<
   ModelRegistry,
@@ -32,12 +32,12 @@ export interface Service {
   readonly getModel: (
     provider: string,
     modelId: string,
-  ) => Effect.Effect<Model.Model, ProviderNotFoundError | ModelNotFoundError>;
+  ) => Effect.Effect<Model.Model, AiError.AiError>;
 
   /**
    * 获取指定供应商已注册的所有模型设置
    */
-  readonly getModels: (provider: string) => Effect.Effect<Model.Model[], ProviderNotFoundError>;
+  readonly getModels: (provider: string) => Effect.Effect<Model.Model[], AiError.AiError>;
 }
 
 // #endregion
@@ -111,12 +111,12 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
       const providerModels = registry.get(provider);
 
       if (providerModels === undefined) {
-        return yield* new ProviderNotFoundError({ provider });
+        return yield* new AiError.ProviderNotFoundError({ provider });
       }
 
       const model = providerModels.get(modelId);
       if (model === undefined) {
-        return yield* new ModelNotFoundError({ provider, modelId });
+        return yield* new AiError.ModelNotFoundError({ provider, modelId });
       }
 
       return model;
@@ -127,7 +127,7 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
       const providerModels = registry.get(provider);
 
       if (providerModels === undefined) {
-        return yield* new ProviderNotFoundError({ provider });
+        return yield* new AiError.ProviderNotFoundError({ provider });
       }
 
       return Array.from(providerModels.values());
@@ -140,11 +140,6 @@ export const make = Effect.fnUntraced(function* (input: RawInput) {
  */
 export const fromJson = (data: string): Effect.Effect<Service, ParseError> =>
   Effect.flatMap(decodeJson(data), make);
-
-// #endregion
-
-// -----------------------------------------------------------------------------
-// #region (Layers)
 
 /**
  * 构造 ModelRegistryLayer
@@ -176,25 +171,12 @@ export const exportJson: Effect.Effect<string, AiError.AiError, ModelRegistry> =
 export const getModel = (
   provider: string,
   modelId: string,
-): Effect.Effect<Model.Model, ProviderNotFoundError | ModelNotFoundError, ModelRegistry> =>
+): Effect.Effect<Model.Model, AiError.AiError, ModelRegistry> =>
   ModelRegistry.pipe(Effect.flatMap((service) => service.getModel(provider, modelId)));
 
 export const getModels = (
   provider: string,
-): Effect.Effect<Model.Model[], ProviderNotFoundError, ModelRegistry> =>
+): Effect.Effect<Model.Model[], AiError.AiError, ModelRegistry> =>
   ModelRegistry.pipe(Effect.flatMap((service) => service.getModels(provider)));
-
-// #endregion
-
-// -----------------------------------------------------------------------------
-// #region (Errors)
-
-export class ProviderNotFoundError extends Schema.TaggedError<ProviderNotFoundError>(
-  "@halo/ai/model/ProviderNotFoundError",
-)("ProviderNotFoundError", { provider: Schema.String }) {}
-
-export class ModelNotFoundError extends Schema.TaggedError<ModelNotFoundError>(
-  "@halo/ai/model/ModelNotFoundError",
-)("ModelNotFoundError", { provider: Schema.String, modelId: Schema.String }) {}
 
 // #endregion
