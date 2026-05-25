@@ -24,14 +24,14 @@
       },
       "web": {
         "@base-ui/react": "^1.5.0",
-        "@tanstack/react-query": "^5.100.11",
-        "@tanstack/react-router": "^1.170.6",
+        "@tanstack/react-query": "^5.100.14",
+        "@tanstack/react-router": "^1.170.8",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "motion": "^12.39.0",
+        "motion": "^12.40.0",
         "react-dom": "^19.2.6",
         "react": "^19.2.6",
-        "shadcn": "^4.7.0",
+        "shadcn": "^4.8.0",
         "tailwind-merge": "^3.6.0",
         "tailwind-variants": "^3.2.2",
         "tailwindcss": "^4.3.0",
@@ -50,7 +50,7 @@
         "tsdown": "^0.22.0",
         "turbo": "^2.9.14",
         "typescript": "^6.0.3",
-        "vite": "^8.0.13"
+        "vite": "^8.0.14"
       },
       "prod": {
         "effect": "^3.21.2"
@@ -61,7 +61,7 @@
         "@effect/language-service": "^0.86.2",
         "@rolldown/plugin-babel": "^0.2.3",
         "@tailwindcss/vite": "^4.3.0",
-        "@tanstack/router-plugin": "^1.168.9",
+        "@tanstack/router-plugin": "^1.168.11",
         "@vitejs/plugin-react": "^6.0.2",
         "babel-plugin-react-compiler": "^1.0.0"
       },
