@@ -84,15 +84,18 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
+    "dev": "turbo run dev --ui=tui --filter=@halo-ai/web --filter=@halo-ai/server --parallel",
     "dev:web": "turbo run dev --filter=@halo-ai/web",
     "dev:server": "turbo run dev --filter=@halo-ai/server",
-    "lint": "oxlint",
+    "lint": "oxlint --report-unused-disable-directives",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "turbo run test",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks && effect-language-service patch",
+    "clean": "rm -rf bun.lock node_modules apps/*/node_modules packages/*/node_modules apps/*/dist apps/*/dist-electron packages/*/dist packages/*/coverage .turbo apps/*/.turbo packages/*/.turbo"
   },
   "devDependencies": {
+    "@effect/language-service": "catalog:dev",
     "@types/node": "catalog:types",
     "lint-staged": "catalog:build",
     "oxfmt": "catalog:build",

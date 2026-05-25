@@ -1,5 +1,5 @@
 {
-  "name": "@halo-ai/ai",
+  "name": "@halo-ai/shared",
   "version": "0.0.0",
   "private": true,
   "homepage": "https://github.com/halojs/halo-agent",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/halojs/halo-agent.git",
-    "directory": "packages/ai"
+    "directory": "packages/shared"
   },
   "type": "module",
   "exports": {
@@ -23,9 +23,7 @@
   "scripts": {
     "lint": "oxlint",
     "format": "oxfmt",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
-    "coverage": "vitest --coverage"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "effect": "catalog:prod"
@@ -33,7 +31,6 @@
   "devDependencies": {
     "@effect/language-service": "catalog:dev",
     "@effect/vitest": "catalog:testing",
-    "@vitest/coverage-v8": "catalog:testing",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
     "typescript": "catalog:build",

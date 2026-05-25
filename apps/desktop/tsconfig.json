@@ -2,16 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "lib": ["ESNext"],
-    "types": ["node", "bun"],
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ],
+    "lib": ["ESNext", "DOM", "ESNext.Disposable"],
+    "types": ["node", "electron"],
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "tsdonw.config.ts"]
 }

@@ -2,13 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "lib": ["ESNext"],
-    "types": ["node", "bun"],
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ],
+    "lib": ["ESNext", "ESNext.Disposable"],
+    "types": ["node"],
     "paths": {
       "~/*": ["./src/*"]
     }

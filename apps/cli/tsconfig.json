@@ -3,12 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "lib": ["ESNext"],
-    "types": ["node", "bun"],
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ],
+    "types": ["node"],
     "paths": {
       "~/*": ["./src/*"]
     }
