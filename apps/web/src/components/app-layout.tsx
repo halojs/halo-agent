@@ -3,8 +3,7 @@ import { LucidePanelLeft, LucideSettings } from "lucide-react";
 import { Fragment } from "react";
 import { APP_STAGE_LABEL } from "~/env";
 import { usePageMeta } from "~/hooks/use-page-meta";
-import { SettingsSidebarNav } from "./settings/settings-sidebar-nav";
-import { SidebarProjectsNav } from "./sidebar/sidebar-projects-nav";
+import { AppSidebar } from "./app-sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "./ui/breadcrumb";
 import { Button } from "./ui/button";
 import { HaloIcon, HaloTextIcon } from "./ui/icons";
@@ -13,13 +12,12 @@ import { Sidebar } from "./ui/sidebar";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = useLocation({ select: (loc) => loc.pathname });
-  const isOpenSettings = pathname.startsWith("/settings");
 
   return (
     <div className="h-full flex p-2 gap-2">
       <Sidebar>
         <AppLayoutTitle />
-        {isOpenSettings ? <SettingsSidebarNav pathname={pathname} /> : <SidebarProjectsNav />}
+        <AppSidebar pathname={pathname} />
       </Sidebar>
       <main className="flex flex-col grow h-full">
         <AppLayoutHeader />
