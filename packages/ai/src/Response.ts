@@ -9,7 +9,7 @@ import * as Prompt from "./Prompt";
 // -----------------------------------------------------------------------------
 // #region (TypeIds)
 
-export const TypeId = "@halo/ai/EventStream";
+export const TypeId = "@halo/ai/Response/EventStream";
 
 export type TypeId = typeof TypeId;
 
@@ -37,7 +37,7 @@ export type EventStream =
 // -----------------------------------------------------------------------------
 // #region (Usage)
 
-export class Usage extends Schema.Class<Usage>("@halo/ai/EventStream/Usage")({
+export class Usage extends Schema.Class<Usage>("@halo/ai/Response/Usage")({
   input: Schema.NonNegative,
   output: Schema.NonNegative,
   reasoning: Schema.optional(Schema.NonNegative),
