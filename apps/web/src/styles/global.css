@@ -58,7 +58,7 @@
   --accent: #121415;
   --accent-foreground: oklch(0.985 0 0);
   --border: #17191a;
-  --input: oklch(1 0 0 / 15%);
+  --input: #17191a;
   --ring: oklch(0.552 0.016 285.938);
   --info: var(--color-blue-500);
   --info-foreground: var(--color-blue-400);

@@ -1,12 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/settings")({
   staticData: {
     title: "Settings",
   },
-  component: SettingsView,
+  beforeLoad: async ({ location }) => {
+    if (location.pathname === "/settings") {
+      throw redirect({ to: "/settings/general", replace: true });
+    }
+  },
+  component: SettingsRouteLayout,
 });
 
-function SettingsView() {
-  return <div>Hello "/settings"!</div>;
+function SettingsRouteLayout() {
+  return (
+    <div className="mx-auto w-full max-w-3xl flex flex-col gap-8">
+      <Outlet />
+    </div>
+  );
 }
