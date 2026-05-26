@@ -1,15 +1,12 @@
-import { RiArrowDownCircleLine, RiSettingsLine } from "@remixicon/react";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Fragment } from "react";
 import { APP_STAGE_LABEL } from "~/env";
 import { usePageMeta } from "~/hooks/use-page-meta";
 import { AppSidebar } from "./app-sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "./ui/breadcrumb";
-import { Button } from "./ui/button";
 import { HaloIcon, HaloTextIcon } from "./ui/icons";
 import { ScrollArea } from "./ui/scroll-area";
 import { Sidebar } from "./ui/sidebar";
-import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = useLocation({ select: (loc) => loc.pathname });
@@ -84,20 +81,5 @@ function AppLayoutBreadcrumb() {
         })}
       </BreadcrumbList>
     </Breadcrumb>
-  );
-}
-
-function AppLayoutButton({
-  children,
-  tooltip,
-  ...props
-}: React.ComponentProps<"button"> & { tooltip?: string }) {
-  return (
-    <Tooltip disabled={!tooltip}>
-      <TooltipTrigger render={<Button {...props} variant="ghost" size="sm"></Button>}>
-        {children}
-      </TooltipTrigger>
-      <TooltipPopup>{tooltip}</TooltipPopup>
-    </Tooltip>
   );
 }

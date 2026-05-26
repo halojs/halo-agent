@@ -3,12 +3,16 @@ import {
   RiBookShelfLine,
   RiEqualizer2Line,
   RiFolderAddLine,
-  RiInformation2Line,
   RiRobot2Line,
   RiPulseLine,
+  RiStackLine,
   RiSettingsLine,
+  RiFlaskLine,
+  RiGitBranchLine,
+  RiSlashCommands2,
 } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
+import { MCPIcon } from "./ui/icons";
 import {
   SidebarCollapse,
   SidebarCollapseItem,
@@ -56,11 +60,9 @@ function ProjectsNav() {
   );
 }
 
-type MainSectionPath = "/knowledge" | "/activity";
-
 const MAIN_NAV_ITEMS: ReadonlyArray<{
   label: string;
-  to: MainSectionPath;
+  to: string;
   icon: ComponentType<{ className?: string }>;
 }> = [
   { label: "Knowledge Base", to: "/knowledge", icon: RiBookShelfLine },
@@ -77,11 +79,7 @@ function MainNav({ pathname }: { pathname: string }) {
         const isActive = pathname === item.to;
 
         return (
-          <SidebarItem
-            key={item.to}
-            active={isActive}
-            onClick={() => navigate({ to: item.to as string })}
-          >
+          <SidebarItem key={item.to} active={isActive} onClick={() => navigate({ to: item.to })}>
             <Icon />
             {item.label}
           </SidebarItem>
@@ -101,16 +99,18 @@ function SecondaryNav() {
   );
 }
 
-type SettingsSectionPath = "/settings/general" | "/settings/providers" | "/settings/info";
-
 const SETTINGS_NAV_ITEMS: ReadonlyArray<{
   label: string;
-  to: SettingsSectionPath;
+  to: string;
   icon: ComponentType<{ className?: string }>;
 }> = [
   { label: "General", to: "/settings/general", icon: RiEqualizer2Line },
-  { label: "Providers", to: "/settings/providers", icon: RiRobot2Line },
-  { label: "Info", to: "/settings/info", icon: RiInformation2Line },
+  { label: "Models", to: "/settings/models", icon: RiStackLine },
+  { label: "Agents", to: "/settings/agents", icon: RiRobot2Line },
+  { label: "MCP Servers", to: "/settings/mcp-servers", icon: MCPIcon },
+  { label: "Skills", to: "/settings/skills", icon: RiSlashCommands2 },
+  { label: "Version Control", to: "/settings/version-control", icon: RiGitBranchLine },
+  { label: "Betas", to: "/settings/betas", icon: RiFlaskLine },
 ];
 
 function SidebarSettingsNav({ pathname }: { pathname: string }) {
@@ -123,11 +123,7 @@ function SidebarSettingsNav({ pathname }: { pathname: string }) {
         const isActive = pathname === item.to;
 
         return (
-          <SidebarItem
-            key={item.to}
-            active={isActive}
-            onClick={() => navigate({ to: item.to as string })}
-          >
+          <SidebarItem key={item.to} active={isActive} onClick={() => navigate({ to: item.to })}>
             <Icon />
             {item.label}
           </SidebarItem>

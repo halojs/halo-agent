@@ -2,6 +2,7 @@ import { RiArrowRightSLine, RiFolderLine, RiChatNewLine } from "@remixicon/react
 import { cn } from "~/lib/utils";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "./button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 export function Sidebar({ children, className }: React.ComponentProps<"aside">) {
   return (
@@ -15,15 +16,20 @@ export function SidebarGroup({ children, className }: React.ComponentProps<"div"
 
 export function SidebarGroupHeader({
   title,
+  tooltip,
   children,
   onClick,
-}: React.ComponentProps<"div"> & { onClick?: () => void }) {
+}: React.ComponentProps<"div"> & { tooltip?: string; onClick?: () => void }) {
   return (
     <div className="group flex-y-center h-6">
       <span className="grow font-heading uppercase text-xs text-muted-foreground select-none">
         {title}
       </span>
-      {children && <SidebarHoverButton onClick={onClick}>{children}</SidebarHoverButton>}
+      {children && (
+        <SidebarHoverButton title={tooltip} onClick={onClick}>
+          {children}
+        </SidebarHoverButton>
+      )}
     </div>
   );
 }
@@ -38,7 +44,7 @@ export function SidebarItem({
     <button
       {...props}
       className={cn(
-        "flex-y-center text-sm gap-2 py-2 text-foreground/80 transition-colors focus-visible:outline-none [&_svg]:text-muted-foreground [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
+        "flex-y-center text-sm gap-2 py-2 text-foreground/60 transition-colors focus-visible:outline-none [&_svg]:text-muted-foreground [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
         active && "font-heading text-foreground font-medium [&_svg]:text-foreground",
         !active && "hover:text-foreground",
         className,
@@ -51,26 +57,26 @@ export function SidebarItem({
 
 export function SidebarCollapse({
   title,
-  icon,
+  icon: Icon,
+  suffixIcon: SuffixIcon,
   children,
 }: {
   title: string;
   icon?: React.ReactNode;
+  suffixIcon?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
     <Collapsible className="group select-none">
       <div className="flex-y-center justify-between py-1">
-        <CollapsibleTrigger className="flex-y-center gap-2 text-foreground/80 transition-colors focus-visible:outline-none group-hover:text-foreground data-panel-open:[&>svg]:rotate-90 data-panel-open:[&_span]:font-semibold data-panel-open:[&_span]:text-foreground [&_span>svg]:text-muted-foreground data-panel-open:[&_span>svg]:text-primary">
+        <CollapsibleTrigger className="grow flex-y-center gap-2 text-foreground/60 transition-colors focus-visible:outline-none group-hover:text-foreground data-panel-open:[&>svg]:rotate-90 data-panel-open:[&_span]:font-semibold data-panel-open:[&_span]:text-foreground [&_span>svg]:text-muted-foreground data-panel-open:[&_span>svg]:text-primary">
           <RiArrowRightSLine className="text-muted-foreground size-4 transition-transform duration-150" />
           <span className="font-heading flex-y-center gap-2 text-sm">
-            {icon || <RiFolderLine className="size-4" />}
+            {Icon || <RiFolderLine className="size-4" />}
             {title}
           </span>
         </CollapsibleTrigger>
-        <SidebarHoverButton>
-          <RiChatNewLine />
-        </SidebarHoverButton>
+        {SuffixIcon && <SidebarHoverButton>{SuffixIcon}</SidebarHoverButton>}
       </div>
       <CollapsiblePanel className="pl-2">
         <div className="flex flex-col pl-4 py-2 border-l text-sm gap-1">{children}</div>
@@ -96,15 +102,22 @@ export function SidebarCollapseItem({
   );
 }
 
-export function SidebarHoverButton({ children, ...props }: React.ComponentProps<"button">) {
+export function SidebarHoverButton({ title, children, ...props }: React.ComponentProps<"button">) {
   return (
-    <Button
-      {...props}
-      variant="ghost"
-      size="sm"
-      className="opacity-0 group-hover:opacity-100 transition-opacity"
-    >
-      {children}
-    </Button>
+    <Tooltip disabled={!title}>
+      <TooltipTrigger
+        render={
+          <Button
+            {...props}
+            variant="ghost"
+            size="sm"
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          />
+        }
+      >
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>{title}</TooltipContent>
+    </Tooltip>
   );
 }
