@@ -1,4 +1,4 @@
-import { LucideChevronRight, LucideFolder, LucideMessageSquarePlus } from "lucide-react";
+import { RiArrowRightSLine, RiFolderLine, RiChatNewLine } from "@remixicon/react";
 import { cn } from "~/lib/utils";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "./button";
@@ -39,8 +39,8 @@ export function SidebarItem({
     <button
       {...props}
       className={cn(
-        "flex-y-center gap-2 py-2 text-foreground/50 transition-colors focus-visible:outline-none [&_svg]:text-foreground/50 [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
-        active && "text-foreground font-medium bg-muted",
+        "flex-y-center text-sm gap-2 px-3 py-2 rounded-md text-foreground/80 transition-colors focus-visible:outline-none [&_svg]:text-foreground/50 [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
+        active && "font-heading text-foreground font-medium bg-accent [&_svg]:text-foreground",
         !active && "hover:text-foreground",
       )}
     >
@@ -61,15 +61,15 @@ export function SidebarCollapse({
   return (
     <Collapsible className="group select-none">
       <div className="flex-y-center justify-between py-1">
-        <CollapsibleTrigger className="flex-y-center gap-2 text-foreground/50 transition-colors focus-visible:outline-none group-hover:text-foreground data-panel-open:[&>svg]:rotate-90 data-panel-open:[&_span]:font-semibold data-panel-open:[&_span]:text-foreground">
-          <LucideChevronRight className="text-muted-foreground size-4 transition-transform duration-150" />
+        <CollapsibleTrigger className="flex-y-center gap-2 text-foreground/80 transition-colors focus-visible:outline-none group-hover:text-foreground data-panel-open:[&>svg]:rotate-90 data-panel-open:[&_span]:font-semibold data-panel-open:[&_span]:text-foreground [&_span>svg]:text-muted-foreground data-panel-open:[&_span>svg]:text-primary">
+          <RiArrowRightSLine className="text-muted-foreground size-4 transition-transform duration-150" />
           <span className="font-heading flex-y-center gap-2 text-sm">
-            {icon || <LucideFolder className="size-4" />}
+            {icon || <RiFolderLine className="size-4" />}
             {title}
           </span>
         </CollapsibleTrigger>
         <SidebarHoverButton>
-          <LucideMessageSquarePlus />
+          <RiChatNewLine />
         </SidebarHoverButton>
       </div>
       <CollapsiblePanel className="pl-2">
@@ -87,8 +87,8 @@ export function SidebarCollapseItem({
     <button
       className={cn(
         "flex-y-center justify-between px-3 py-1.5 text-muted-foreground text-sm transition-colors rounded-md focus-visible:outline-none [&_small]:text-xs [&_small]:font-normal [&_small]:text-muted-foreground/80",
-        active && "text-primary font-medium bg-accent",
-        !active && "hover:text-primary",
+        active && "text-foreground font-medium bg-accent",
+        !active && "hover:text-foreground",
       )}
     >
       {children}

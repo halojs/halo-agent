@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete";
-import { ChevronsUpDownIcon, XIcon } from "lucide-react";
+import { RiCloseLine, RiExpandUpDownLine } from "@remixicon/react";
 import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
@@ -65,7 +65,7 @@ export function AutocompleteInput({
           {...triggerProps}
         >
           <AutocompletePrimitive.Icon data-slot="autocomplete-icon">
-            <ChevronsUpDownIcon />
+            <RiExpandUpDownLine />
           </AutocompletePrimitive.Icon>
         </AutocompleteTrigger>
       )}
@@ -77,7 +77,7 @@ export function AutocompleteInput({
           )}
           {...clearProps}
         >
-          <XIcon />
+          <RiCloseLine />
         </AutocompleteClear>
       )}
     </AutocompletePrimitive.InputGroup>
@@ -249,7 +249,7 @@ export function AutocompleteClear({
       data-slot="autocomplete-clear"
       {...props}
     >
-      <XIcon />
+      <RiCloseLine />
     </AutocompletePrimitive.Clear>
   );
 }

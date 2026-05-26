@@ -2,7 +2,7 @@
 
 import type * as React from "react";
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog";
-import { SearchIcon } from "lucide-react";
+import { RiSearchLine } from "@remixicon/react";
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -120,7 +120,7 @@ export function CommandInput({
         )}
         placeholder={placeholder}
         size="lg"
-        startAddon={<SearchIcon />}
+        startAddon={<RiSearchLine />}
         {...props}
       />
     </div>
