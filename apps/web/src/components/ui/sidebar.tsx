@@ -3,23 +3,21 @@ import { cn } from "~/lib/utils";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "./button";
 
-export function Sidebar({ children }: { children?: React.ReactNode }) {
-  return <aside className="sticky flex flex-col w-70 px-2 gap-2">{children}</aside>;
+export function Sidebar({ children, className }: React.ComponentProps<"aside">) {
+  return (
+    <aside className={cn("sticky flex flex-col w-70 px-2 gap-2", className)}>{children}</aside>
+  );
 }
 
-export function SidebarGroup({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-1">{children}</div>;
+export function SidebarGroup({ children, className }: React.ComponentProps<"div">) {
+  return <div className={cn("flex flex-col gap-1", className)}>{children}</div>;
 }
 
 export function SidebarGroupHeader({
   title,
   children,
   onClick,
-}: {
-  title: string;
-  children?: React.ReactNode;
-  onClick?: () => void;
-}) {
+}: React.ComponentProps<"div"> & { onClick?: () => void }) {
   return (
     <div className="group flex-y-center h-6">
       <span className="grow font-heading uppercase text-xs text-muted-foreground select-none">
@@ -33,15 +31,17 @@ export function SidebarGroupHeader({
 export function SidebarItem({
   active,
   children,
+  className,
   ...props
 }: React.ComponentProps<"button"> & { active?: boolean }) {
   return (
     <button
       {...props}
       className={cn(
-        "flex-y-center text-sm gap-2 px-3 py-2 rounded-md text-foreground/80 transition-colors focus-visible:outline-none [&_svg]:text-foreground/50 [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
-        active && "font-heading text-foreground font-medium bg-accent [&_svg]:text-foreground",
+        "flex-y-center text-sm gap-2 py-2 text-foreground/80 transition-colors focus-visible:outline-none [&_svg]:text-muted-foreground [&_svg]:size-4 hover:not-[&_svg]:text-foreground",
+        active && "font-heading text-foreground font-medium [&_svg]:text-foreground",
         !active && "hover:text-foreground",
+        className,
       )}
     >
       {children}

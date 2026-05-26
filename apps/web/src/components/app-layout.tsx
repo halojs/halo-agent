@@ -44,28 +44,18 @@ function AppLayoutTitle() {
           <small>{APP_STAGE_LABEL}</small>
         </span>
       </div>
-
-      <AppLayoutButton>
-        <RiArrowDownCircleLine />
-      </AppLayoutButton>
     </div>
   );
 }
 
 function AppLayoutHeader() {
-  const navigate = useNavigate();
-
   return (
     <header className="flex-y-center gap-4 h-8.5 mb-2 px-2">
       <div className="grow flex-y-center gap-2">
         <AppLayoutBreadcrumb />
       </div>
 
-      <div className="flex-y-center gap-4">
-        <AppLayoutButton onClick={() => navigate({ to: "/settings" })}>
-          <RiSettingsLine />
-        </AppLayoutButton>
-      </div>
+      <div className="flex-y-center gap-4"></div>
     </header>
   );
 }

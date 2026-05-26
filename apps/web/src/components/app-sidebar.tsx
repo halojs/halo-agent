@@ -1,9 +1,12 @@
 import type { ComponentType } from "react";
 import {
+  RiBookShelfLine,
   RiEqualizer2Line,
   RiFolderAddLine,
   RiInformation2Line,
   RiRobot2Line,
+  RiPulseLine,
+  RiSettingsLine,
 } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -17,10 +20,24 @@ import {
 export function AppSidebar({ pathname }: { pathname: string }) {
   const isOpenSettings = pathname.startsWith("/settings");
 
-  return isOpenSettings ? <SettingsSidebarNav pathname={pathname} /> : <ProjectsSidebarNav />;
+  return isOpenSettings ? (
+    <SidebarSettingsNav pathname={pathname} />
+  ) : (
+    <SidebarMainNav pathname={pathname} />
+  );
 }
 
-export function ProjectsSidebarNav() {
+function SidebarMainNav({ pathname }: { pathname: string }) {
+  return (
+    <>
+      <ProjectsNav />
+      <MainNav pathname={pathname} />
+      <SecondaryNav />
+    </>
+  );
+}
+
+function ProjectsNav() {
   return (
     <SidebarGroup>
       <SidebarGroupHeader title="Projects">
@@ -35,13 +52,52 @@ export function ProjectsSidebarNav() {
           <small>2d</small>
         </SidebarCollapseItem>
       </SidebarCollapse>
-      <SidebarCollapse title="Halo Gateway">
-        <SidebarCollapseItem>
-          <span>Hello</span>
-          <small>2d</small>
-        </SidebarCollapseItem>
-      </SidebarCollapse>
     </SidebarGroup>
+  );
+}
+
+type MainSectionPath = "/knowledge" | "/activity";
+
+const MAIN_NAV_ITEMS: ReadonlyArray<{
+  label: string;
+  to: MainSectionPath;
+  icon: ComponentType<{ className?: string }>;
+}> = [
+  { label: "Knowledge Base", to: "/knowledge", icon: RiBookShelfLine },
+  { label: "Activity", to: "/activity", icon: RiPulseLine },
+];
+
+function MainNav({ pathname }: { pathname: string }) {
+  const navigate = useNavigate();
+
+  return (
+    <SidebarGroup className="grow">
+      {MAIN_NAV_ITEMS.map((item) => {
+        const Icon = item.icon;
+        const isActive = pathname === item.to;
+
+        return (
+          <SidebarItem
+            key={item.to}
+            active={isActive}
+            onClick={() => navigate({ to: item.to as string })}
+          >
+            <Icon />
+            {item.label}
+          </SidebarItem>
+        );
+      })}
+    </SidebarGroup>
+  );
+}
+
+function SecondaryNav() {
+  const navigate = useNavigate();
+  return (
+    <SidebarItem onClick={() => navigate({ to: "/settings" })}>
+      <RiSettingsLine />
+      Settings
+    </SidebarItem>
   );
 }
 
@@ -57,7 +113,7 @@ const SETTINGS_NAV_ITEMS: ReadonlyArray<{
   { label: "Info", to: "/settings/info", icon: RiInformation2Line },
 ];
 
-export function SettingsSidebarNav({ pathname }: { pathname: string }) {
+function SidebarSettingsNav({ pathname }: { pathname: string }) {
   const navigate = useNavigate();
 
   return (
