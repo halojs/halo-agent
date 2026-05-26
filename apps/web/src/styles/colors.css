@@ -1,17 +1,3 @@
-:root {
-  --color-japonica-50: oklch(97.225% 0.01007 48.204);
-  --color-japonica-100: oklch(93.663% 0.02382 50.996);
-  --color-japonica-200: oklch(86.876% 0.04928 48.717);
-  --color-japonica-300: oklch(78.117% 0.08428 44.906);
-  --color-japonica-400: oklch(67.241% 0.13081 38.733);
-  --color-japonica-500: oklch(61.777% 0.15648 35.728);
-  --color-japonica-600: oklch(56.557% 0.16492 31.531);
-  --color-japonica-700: oklch(48.903% 0.147 28.741);
-  --color-japonica-800: oklch(42.35% 0.1194 26.136);
-  --color-japonica-900: oklch(37.232% 0.09561 26.197);
-  --color-japonica-950: oklch(24.511% 0.06248 24.256);
-}
-
 @theme {
   /* clay */
   --color-clay-50: oklch(0.972 0.01 48.204);
