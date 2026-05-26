@@ -1,5 +1,11 @@
 import type { ComponentType } from "react";
-import { LucideInfo, LucideBotMessageSquare, LucideCog, LucideFolderPlus } from "lucide-react";
+import {
+  RiEqualizer2Line,
+  RiFolderAddLine,
+  RiInformation2Line,
+  RiRobot2Line,
+} from "@remixicon/react";
+import { useNavigate } from "@tanstack/react-router";
 import {
   SidebarCollapse,
   SidebarCollapseItem,
@@ -18,7 +24,7 @@ export function ProjectsSidebarNav() {
   return (
     <SidebarGroup>
       <SidebarGroupHeader title="Projects">
-        <LucideFolderPlus />
+        <RiFolderAddLine />
       </SidebarGroupHeader>
       <SidebarCollapse title="Halo Agent">
         <SidebarCollapseItem active={true}>
@@ -46,12 +52,14 @@ const SETTINGS_NAV_ITEMS: ReadonlyArray<{
   to: SettingsSectionPath;
   icon: ComponentType<{ className?: string }>;
 }> = [
-  { label: "General", to: "/settings/general", icon: LucideCog },
-  { label: "Providers", to: "/settings/providers", icon: LucideBotMessageSquare },
-  { label: "Info", to: "/settings/info", icon: LucideInfo },
+  { label: "General", to: "/settings/general", icon: RiEqualizer2Line },
+  { label: "Providers", to: "/settings/providers", icon: RiRobot2Line },
+  { label: "Info", to: "/settings/info", icon: RiInformation2Line },
 ];
 
 export function SettingsSidebarNav({ pathname }: { pathname: string }) {
+  const navigate = useNavigate();
+
   return (
     <SidebarGroup>
       {SETTINGS_NAV_ITEMS.map((item) => {
@@ -59,7 +67,11 @@ export function SettingsSidebarNav({ pathname }: { pathname: string }) {
         const isActive = pathname === item.to;
 
         return (
-          <SidebarItem key={item.to} active={isActive}>
+          <SidebarItem
+            key={item.to}
+            active={isActive}
+            onClick={() => navigate({ to: item.to as string })}
+          >
             <Icon />
             {item.label}
           </SidebarItem>

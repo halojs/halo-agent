@@ -1,5 +1,5 @@
+import { RiArrowDownCircleLine, RiSettingsLine } from "@remixicon/react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { LucidePanelLeft, LucideSettings } from "lucide-react";
 import { Fragment } from "react";
 import { APP_STAGE_LABEL } from "~/env";
 import { usePageMeta } from "~/hooks/use-page-meta";
@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { HaloIcon, HaloTextIcon } from "./ui/icons";
 import { ScrollArea } from "./ui/scroll-area";
 import { Sidebar } from "./ui/sidebar";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = useLocation({ select: (loc) => loc.pathname });
@@ -45,7 +46,7 @@ function AppLayoutTitle() {
       </div>
 
       <AppLayoutButton>
-        <LucidePanelLeft />
+        <RiArrowDownCircleLine />
       </AppLayoutButton>
     </div>
   );
@@ -62,7 +63,7 @@ function AppLayoutHeader() {
 
       <div className="flex-y-center gap-4">
         <AppLayoutButton onClick={() => navigate({ to: "/settings" })}>
-          <LucideSettings />
+          <RiSettingsLine />
         </AppLayoutButton>
       </div>
     </header>
@@ -84,7 +85,7 @@ function AppLayoutBreadcrumb() {
 
           return (
             <Fragment key={`${breadcrumb.path}-${i}`}>
-              <BreadcrumbItem className={isLast ? "text-foreground font-medium" : ""}>
+              <BreadcrumbItem className={isLast ? "text-foreground font-semibold" : ""}>
                 {breadcrumb.label}
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}
@@ -96,10 +97,17 @@ function AppLayoutBreadcrumb() {
   );
 }
 
-function AppLayoutButton({ children, ...props }: React.ComponentProps<"button">) {
+function AppLayoutButton({
+  children,
+  tooltip,
+  ...props
+}: React.ComponentProps<"button"> & { tooltip?: string }) {
   return (
-    <Button {...props} variant="ghost" size="sm">
-      {children}
-    </Button>
+    <Tooltip disabled={!tooltip}>
+      <TooltipTrigger render={<Button {...props} variant="ghost" size="sm"></Button>}>
+        {children}
+      </TooltipTrigger>
+      <TooltipPopup>{tooltip}</TooltipPopup>
+    </Tooltip>
   );
 }
