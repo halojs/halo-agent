@@ -51,6 +51,7 @@
     "clsx": "catalog:web",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
+    "react-circle-flags": "catalog:assets",
     "shadcn": "catalog:web",
     "tailwind-merge": "catalog:web",
     "tailwind-variants": "catalog:web",
