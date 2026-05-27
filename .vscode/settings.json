@@ -16,9 +16,18 @@
     "**/routeTree.gen.ts": true
   },
   "files.watcherExclude": {
+    "repos/**": true,
+    "**/routeTree.gen.ts": true
+  },
+  "files.exclude": {
+    "repos/**": true,
     "**/routeTree.gen.ts": true
   },
   "search.exclude": {
+    "repos/**": true,
     "**/routeTree.gen.ts": true
-  }
+  },
+
+  "typescript.preferences.autoImportFileExcludePatterns": ["repos/**"],
+  "javascript.preferences.autoImportFileExcludePatterns": ["repos/**"]
 }
