@@ -11,9 +11,9 @@ export * as Model from "./Model";
 export * as ModelRegistry from "./ModelRegistry";
 
 /**
- *  统一 LLM 响应事件流
+ * 统一 LLM 响应事件流
  */
-export * as EventStream from "./EventStream";
+export * as Response from "./Response";
 
 /**
  * 提示词

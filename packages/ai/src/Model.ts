@@ -1,7 +1,7 @@
 import * as Schema from "effect/Schema";
 
 // -----------------------------------------------------------------------------
-// #region (Schemas)
+// #region (Model)
 
 export const Api = Schema.Literal("openai-completions", "openai-responses", "anthropic-messages");
 export type Api = typeof Api.Type;

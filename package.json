@@ -19,7 +19,7 @@
     ],
     "catalogs": {
       "desktop": {
-        "electron": "^42.2.0",
+        "electron": "^42.3.0",
         "electron-updater": "^6.8.3"
       },
       "web": {
@@ -32,7 +32,7 @@
         "react-dom": "^19.2.6",
         "cmdk": "^1.1.1",
         "react": "^19.2.6",
-        "shadcn": "^4.8.0",
+        "shadcn": "^4.8.1",
         "tailwind-merge": "^3.6.0",
         "tailwind-variants": "^3.2.2",
         "tailwindcss": "^4.3.0",
@@ -47,11 +47,11 @@
       },
       "build": {
         "lint-staged": "^17.0.5",
-        "oxfmt": "^0.51.0",
-        "oxlint": "^1.66.0",
+        "oxfmt": "^0.52.0",
+        "oxlint": "^1.67.0",
         "simple-git-hooks": "^2.13.1",
         "tsdown": "^0.22.0",
-        "turbo": "^2.9.14",
+        "turbo": "^2.9.15",
         "typescript": "^6.0.3",
         "vite": "^8.0.14"
       },
@@ -59,7 +59,7 @@
         "effect": "^3.21.2"
       },
       "dev": {
-        "@babel/core": "^7.29.0",
+        "@babel/core": "^7.29.7",
         "@effect/experimental": "^0.60.0",
         "@effect/language-service": "^0.86.2",
         "@rolldown/plugin-babel": "^0.2.3",
