@@ -28,6 +28,7 @@
     "coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@halo-ai/contracts": "workspace:*",
     "effect": "catalog:prod"
   },
   "devDependencies": {

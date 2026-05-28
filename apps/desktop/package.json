@@ -26,6 +26,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@halo-ai/contracts": "workspace:*",
     "effect": "catalog:prod",
     "electron": "catalog:desktop",
     "electron-updater": "catalog:desktop"

@@ -21,13 +21,14 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@halo-ai/ai": "workspace:*",
+    "@halo-ai/contracts": "workspace:*",
+    "@halo-ai/web": "workspace:*",
     "effect": "catalog:prod"
   },
   "devDependencies": {
     "@effect/language-service": "catalog:dev",
     "@effect/vitest": "catalog:testing",
-    "@halo-ai/ai": "workspace:*",
-    "@halo-ai/web": "workspace:*",
     "@types/node": "catalog:types",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",

@@ -24,10 +24,9 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@halo-ai/contracts": "workspace:*",
     "@tanstack/react-query": "catalog:web",
     "@tanstack/react-router": "catalog:web",
-    "cmdk": "catalog:web",
-    "motion": "catalog:web",
     "react": "catalog:web",
     "react-dom": "catalog:web"
   },
@@ -49,6 +48,8 @@
     "babel-plugin-react-compiler": "catalog:dev",
     "class-variance-authority": "catalog:web",
     "clsx": "catalog:web",
+    "cmdk": "catalog:web",
+    "motion": "catalog:web",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
     "react-circle-flags": "catalog:assets",
