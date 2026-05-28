@@ -21,19 +21,25 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@halo-ai/ai": "workspace:*",
-    "@halo-ai/contracts": "workspace:*",
-    "@halo-ai/web": "workspace:*",
+    "@effect/platform": "catalog:prod",
+    "@effect/platform-bun": "catalog:prod",
+    "@effect/platform-node": "catalog:prod",
     "effect": "catalog:prod"
   },
   "devDependencies": {
     "@effect/language-service": "catalog:dev",
     "@effect/vitest": "catalog:testing",
+    "@halo-ai/web": "workspace:*",
     "@types/node": "catalog:types",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
     "tsdown": "catalog:build",
     "typescript": "catalog:build",
     "vitest": "catalog:testing"
-  }
+  },
+  "engines": {
+    "bun": "^1.3.12",
+    "node": "^24.14.1"
+  },
+  "packageManager": "bun@1.3.14"
 }

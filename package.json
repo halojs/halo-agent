@@ -32,7 +32,7 @@
         "react-dom": "^19.2.6",
         "cmdk": "^1.1.1",
         "react": "^19.2.6",
-        "shadcn": "^4.8.1",
+        "shadcn": "^4.8.2",
         "tailwind-merge": "^3.6.0",
         "tailwind-variants": "^3.2.2",
         "tailwindcss": "^4.3.0",
@@ -56,6 +56,9 @@
         "vite": "^8.0.14"
       },
       "prod": {
+        "@effect/platform": "^0.96.1",
+        "@effect/platform-bun": "^0.89.0",
+        "@effect/platform-node": "^0.106.0",
         "effect": "^3.21.2"
       },
       "dev": {
