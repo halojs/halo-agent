@@ -14,3 +14,6 @@ tsconfig.tsbuildinfo
 
 # 忽略 routeTree.gen.ts
 apps/web/src/routeTree.gen.ts
+
+# vendored repos
+repos/**
