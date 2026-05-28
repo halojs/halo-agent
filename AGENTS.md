@@ -23,11 +23,11 @@ Halo Agent 是一个轻量级的 Web GUI，用于以对话的方式与 Agent AI 
 
 ## 参考代码
 
-本项目将外部仓库 vendoring（内嵌/镜像）到 @repos/ 目录下。
+本项目将外部仓库 vendoring 到 @repos/ 目录下。
 
 - 在处理相关库时，将这些 vendored 仓库视为只读参考资料
 - 优先参考 vendored 源码中的示例、模式和实现方式，而不是依赖模型生成的猜测或 Web 搜索结果
 - 除非明确要求，否则不要修改 @repos/ 下的文件
 - 不要从 @repos/ 进行 import —— 应用代码仍然应当从正常的包依赖中导入
 
-在编写 Effect 代码时，请检查 @repos/effect/ 中的内容，参考其中的惯用写法、测试用例、模块结构以及 API 设计，并将其视为 Effect 编码模式的事实标准(source of truth)。
+在编写 Effect 代码时，请检查 @repos/effect/ 中的内容，参考其中的惯用写法、测试用例、模块结构以及 API 设计，并将其视为 Effect 编码模式的事实标准。
