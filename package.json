@@ -98,6 +98,7 @@
     "format:check": "oxfmt --check",
     "test": "turbo run test",
     "prepare": "simple-git-hooks && effect-language-service patch",
+    "prepare:repos": "scripts/prepare-vendored-repos.sh",
     "clean": "rm -rf bun.lock node_modules apps/*/node_modules packages/*/node_modules apps/*/dist apps/*/dist-electron packages/*/dist packages/*/coverage .turbo apps/*/.turbo packages/*/.turbo"
   },
   "devDependencies": {
