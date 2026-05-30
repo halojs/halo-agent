@@ -4,14 +4,13 @@ import { expect, it } from "@effect/vitest";
 import * as ConfigError from "effect/ConfigError";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Effect from "effect/Effect";
-import * as LogLevel from "effect/LogLevel";
 import * as NodeOS from "node:os";
 import {
   DEFAULT_CONFIG_DIR_NAME,
   DEFAULT_PORT,
-  resolveServerConfig,
-  resolveServerPaths,
-} from "../src/config";
+  ServerConfigLive,
+} from "../src/server/Layers/ServerConfig";
+import { ServerConfig } from "../src/server/Services/ServerConfig";
 
 type ConfigEntry = readonly [string, string];
 
@@ -20,11 +19,14 @@ const withConfig =
   <A, E, R>(effect: Effect.Effect<A, E, R>) =>
     effect.pipe(Effect.withConfigProvider(ConfigProvider.fromMap(new Map(entries))));
 
+const loadServerConfig = (entries: ReadonlyArray<ConfigEntry> = []) =>
+  ServerConfig.pipe(Effect.provide(ServerConfigLive), withConfig(entries));
+
 const resolveWithTempHome = (entries: ReadonlyArray<ConfigEntry> = []) =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
     const home = yield* fs.makeTempDirectoryScoped({ prefix: "halo-config-" });
-    return yield* resolveServerConfig.pipe(withConfig([["HALO_HOME", home], ...entries]));
+    return yield* loadServerConfig([["HALO_HOME", home], ...entries]);
   });
 
 it.layer(NodeContext.layer)("config", (it) => {
@@ -34,7 +36,6 @@ it.layer(NodeContext.layer)("config", (it) => {
       expect(config.port).toBe(DEFAULT_PORT);
       expect(config.mode).toBe("web");
       expect(config.host).toBeUndefined();
-      expect(config.logLevel).toEqual(LogLevel.Info);
     }),
   );
 
@@ -68,18 +69,17 @@ it.layer(NodeContext.layer)("config", (it) => {
       const path = yield* Path.Path;
       const fs = yield* FileSystem.FileSystem;
       const home = yield* fs.makeTempDirectoryScoped({ prefix: "halo-config-" });
-      const config = yield* resolveServerConfig.pipe(withConfig([["HALO_HOME", home]]));
+      const config = yield* loadServerConfig([["HALO_HOME", home]]);
       expect(config.homeDir).toBe(path.resolve(home));
-      expect(config.dataDir).toBe(path.join(config.homeDir, "data"));
-      expect(config.dbPath).toBe(path.join(config.homeDir, "data", "db.sqlite"));
-      expect(config.attachmentsDir).toBe(path.join(config.homeDir, "attachments"));
+      expect(config.dataDir).toBe(path.join(config.homeDir, "userdata"));
+      expect(config.dbPath).toBe(path.join(config.homeDir, "userdata", "db.sqlite"));
     }),
   );
 
   it.effect("uses default home directory under user homedir", () =>
     Effect.gen(function* () {
       const path = yield* Path.Path;
-      const config = yield* resolveServerConfig;
+      const config = yield* loadServerConfig();
       expect(config.homeDir).toBe(path.join(NodeOS.homedir(), DEFAULT_CONFIG_DIR_NAME));
     }),
   );
@@ -89,8 +89,6 @@ it.layer(NodeContext.layer)("config", (it) => {
       const fs = yield* FileSystem.FileSystem;
       const config = yield* resolveWithTempHome();
       expect(yield* fs.exists(config.dataDir)).toBe(true);
-      expect(yield* fs.exists(config.debugDir)).toBe(true);
-      expect(yield* fs.exists(config.sessionsDir)).toBe(true);
     }),
   );
 
@@ -99,11 +97,11 @@ it.layer(NodeContext.layer)("config", (it) => {
       const path = yield* Path.Path;
       const fs = yield* FileSystem.FileSystem;
       const homeDir = yield* fs.makeTempDirectoryScoped({ prefix: "halo-paths-" });
-      const paths = yield* resolveServerPaths(homeDir);
-      expect(paths.dbPath).toBe(path.join(homeDir, "data", "db.sqlite"));
-      expect(paths.modelsPath).toBe(path.join(homeDir, "data", "models.json"));
-      expect(paths.serverLogPath).toBe(path.join(homeDir, "debug", "server.log"));
-      expect(paths.settingsPath).toBe(path.join(homeDir, "settings.json"));
+      const config = yield* loadServerConfig([["HALO_HOME", homeDir]]);
+      expect(config.dataDir).toBe(path.join(homeDir, "userdata"));
+      expect(config.dbPath).toBe(path.join(homeDir, "userdata", "db.sqlite"));
+      expect(config.modelsPath).toBe(path.join(homeDir, "userdata", "models.json"));
+      expect(config.settingsPath).toBe(path.join(homeDir, "userdata", "settings.json"));
     }),
   );
 
