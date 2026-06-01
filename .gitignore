@@ -4,6 +4,7 @@ build
 coverage
 .turbo
 .tanstack
+.astro
 tsconfig.tsbuildinfo
 
 .env
