@@ -4,6 +4,7 @@ import { expect, it } from "@effect/vitest";
 import * as ConfigError from "effect/ConfigError";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Effect from "effect/Effect";
+import * as LogLevel from "effect/LogLevel";
 import * as NodeOS from "node:os";
 import {
   DEFAULT_CONFIG_DIR_NAME,
@@ -29,13 +30,37 @@ const resolveWithTempHome = (entries: ReadonlyArray<ConfigEntry> = []) =>
     return yield* loadServerConfig([["HALO_HOME", home], ...entries]);
   });
 
-it.layer(NodeContext.layer)("config", (it) => {
+it.layer(NodeContext.layer)("ServerConfig", (it) => {
   it.scoped("uses default values when env is unset", () =>
     Effect.gen(function* () {
       const config = yield* resolveWithTempHome();
       expect(config.port).toBe(DEFAULT_PORT);
       expect(config.mode).toBe("web");
       expect(config.host).toBeUndefined();
+      expect(config.logLevel).toEqual(LogLevel.Info);
+      expect(config.traceLevel).toEqual(LogLevel.Trace);
+      expect(config.traceTimingEnabled).toBe(true);
+    }),
+  );
+
+  it.scoped("uses HALO_LOG_LEVEL from config", () =>
+    Effect.gen(function* () {
+      const config = yield* resolveWithTempHome([["HALO_LOG_LEVEL", "Debug"]]);
+      expect(config.logLevel).toEqual(LogLevel.Debug);
+    }),
+  );
+
+  it.scoped("uses HALO_TRACE_LEVEL from config", () =>
+    Effect.gen(function* () {
+      const config = yield* resolveWithTempHome([["HALO_TRACE_LEVEL", "OFF"]]);
+      expect(config.traceLevel).toEqual(LogLevel.None);
+    }),
+  );
+
+  it.scoped("uses HALO_TRACE_TIMING from config", () =>
+    Effect.gen(function* () {
+      const config = yield* resolveWithTempHome([["HALO_TRACE_TIMING", "false"]]);
+      expect(config.traceTimingEnabled).toBe(false);
     }),
   );
 
@@ -92,7 +117,7 @@ it.layer(NodeContext.layer)("config", (it) => {
     }),
   );
 
-  it.scoped("resolveServerPaths joins paths under homeDir", () =>
+  it.scoped("resolves server paths under HALO_HOME", () =>
     Effect.gen(function* () {
       const path = yield* Path.Path;
       const fs = yield* FileSystem.FileSystem;

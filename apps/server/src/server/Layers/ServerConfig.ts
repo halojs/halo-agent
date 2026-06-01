@@ -3,10 +3,11 @@ import * as Path from "@effect/platform/Path";
 import * as Config from "effect/Config";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
+import * as LogLevel from "effect/LogLevel";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import * as NodeOS from "node:os";
-import { optionFromUndefinedOr } from "~/utils";
+import { undefinedToOption } from "~/utils";
 import {
   RuntimeMode,
   ServerConfig,
@@ -18,6 +19,10 @@ export const DEFAULT_PORT = 3603;
 export const DEFAULT_CONFIG_DIR_NAME = ".halo";
 
 const EnvServerConfig = Config.all({
+  enableTracing: Config.boolean("HALO_ENABLE_TRACING").pipe(Config.withDefault(false)),
+  logLevel: Config.logLevel("HALO_LOG_LEVEL").pipe(Config.withDefault(LogLevel.Info)),
+  traceLevel: Config.logLevel("HALO_TRACE_LEVEL").pipe(Config.withDefault(LogLevel.Trace)),
+  traceTiming: Config.boolean("HALO_TRACE_TIMING").pipe(Config.withDefault(true)),
   home: Config.string("HALO_HOME").pipe(Config.option, Config.map(Option.getOrUndefined)),
   mode: Schema.Config("HALO_MODE", RuntimeMode).pipe(
     Config.option,
@@ -103,12 +108,12 @@ const resolveHomeDir = Effect.fn(function* (input: string | undefined) {
 export const makeServerConfig = () =>
   Effect.gen(function* () {
     const env = yield* EnvServerConfig;
-    const homeDir = yield* resolveHomeDir(Option.getOrUndefined(optionFromUndefinedOr(env.home)));
-    const mode: RuntimeMode = Option.getOrElse(optionFromUndefinedOr(env.mode), () => "web");
-    const host = Option.getOrElse(optionFromUndefinedOr(env.host), () =>
+    const homeDir = yield* resolveHomeDir(Option.getOrUndefined(undefinedToOption(env.home)));
+    const mode: RuntimeMode = Option.getOrElse(undefinedToOption(env.mode), () => "web");
+    const host = Option.getOrElse(undefinedToOption(env.host), () =>
       mode === "desktop" ? "127.0.0.1" : undefined,
     );
-    const port = Option.match(optionFromUndefinedOr(env.port), {
+    const port = Option.match(undefinedToOption(env.port), {
       onSome: (value) => value,
       onNone: () => DEFAULT_PORT,
     });
@@ -118,6 +123,9 @@ export const makeServerConfig = () =>
     const clientDir = yield* resolveClientDirectory();
 
     const config: ServerConfigShape = {
+      logLevel: env.logLevel,
+      traceLevel: env.traceLevel,
+      traceTimingEnabled: env.traceTiming,
       mode,
       host,
       port,

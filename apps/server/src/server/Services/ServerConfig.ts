@@ -1,4 +1,5 @@
 import * as Context from "effect/Context";
+import * as LogLevel from "effect/LogLevel";
 import * as Schema from "effect/Schema";
 
 export const RuntimeMode = Schema.Literal("web", "desktop");
@@ -10,6 +11,9 @@ export class ServerConfig extends Context.Tag("@halo/server/Services/ServerConfi
 >() {}
 
 export interface ServerConfigShape extends ServerPaths {
+  readonly logLevel: LogLevel.LogLevel;
+  readonly traceLevel: LogLevel.LogLevel;
+  readonly traceTimingEnabled: boolean;
   readonly mode: RuntimeMode;
   readonly host: string | undefined;
   readonly port: number;
