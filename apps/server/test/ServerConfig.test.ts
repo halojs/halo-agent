@@ -9,9 +9,9 @@ import * as NodeOS from "node:os";
 import {
   DEFAULT_CONFIG_DIR_NAME,
   DEFAULT_PORT,
+  ServerConfig,
   ServerConfigLive,
-} from "../src/server/Layers/ServerConfig";
-import { ServerConfig } from "../src/server/Services/ServerConfig";
+} from "../src/config";
 
 type ConfigEntry = readonly [string, string];
 

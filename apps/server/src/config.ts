@@ -1,6 +1,7 @@
 import * as FileSystem from "@effect/platform/FileSystem";
 import * as Path from "@effect/platform/Path";
 import * as Config from "effect/Config";
+import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as LogLevel from "effect/LogLevel";
@@ -8,15 +9,35 @@ import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import * as NodeOS from "node:os";
 import { undefinedToOption } from "~/utils";
-import {
-  RuntimeMode,
-  ServerConfig,
-  type ServerConfigShape,
-  type ServerPaths,
-} from "../Services/ServerConfig";
 
 export const DEFAULT_PORT = 3603;
 export const DEFAULT_CONFIG_DIR_NAME = ".halo";
+
+export const RuntimeMode = Schema.Literal("web", "desktop");
+export type RuntimeMode = typeof RuntimeMode.Type;
+
+export class ServerConfig extends Context.Tag("@halo/server/Services/ServerConfig")<
+  ServerConfig,
+  ServerConfigShape
+>() {}
+
+export interface ServerConfigShape extends ServerPaths {
+  readonly logLevel: LogLevel.LogLevel;
+  readonly traceLevel: LogLevel.LogLevel;
+  readonly traceTimingEnabled: boolean;
+  readonly mode: RuntimeMode;
+  readonly host: string | undefined;
+  readonly port: number;
+  readonly homeDir: string;
+  readonly clientDir: string | undefined;
+}
+
+export interface ServerPaths {
+  readonly dataDir: string;
+  readonly dbPath: string;
+  readonly modelsPath: string;
+  readonly settingsPath: string;
+}
 
 const EnvServerConfig = Config.all({
   enableTracing: Config.boolean("HALO_ENABLE_TRACING").pipe(Config.withDefault(false)),

@@ -30,6 +30,7 @@
     "@effect/language-service": "catalog:dev",
     "@effect/vitest": "catalog:testing",
     "@halo-ai/web": "workspace:*",
+    "@types/bun": "catalog:types",
     "@types/node": "catalog:types",
     "oxfmt": "catalog:build",
     "oxlint": "catalog:build",
